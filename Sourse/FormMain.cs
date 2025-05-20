@@ -1,17 +1,20 @@
 ﻿
-using System;
-using System.Linq;
-using System.Drawing;
-using System.Reflection;
-using System.Diagnostics;
-using System.Windows.Forms;
-using System.Drawing.Drawing2D;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
-// ------------ !!!
-using System.Threading.Tasks; // Не удалять, используется в Release !!!
+using Newtonsoft.Json;
 // ------------ 
 using S22.Imap;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Linq;
+using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Runtime.Remoting.Contexts;
+using System.Text;
+// ------------ !!!
+using System.Threading.Tasks; // Не удалять, используется в Release !!!
+using System.Windows.Forms;
 
 // ==============================================================
 namespace MailNotifier
@@ -273,8 +276,8 @@ namespace MailNotifier
             string nameParam = arrNamePram[1];
             string ObjectName = arrNamePram[0] + "Editor";
             // ------------
-            var PsInfo = Parameters.GetType().GetProperty(ObjectName);
-            ParamContainers pSetting = (ParamContainers)PsInfo.GetValue(Parameters, null);
+            var PsInfo = Parameters.ParamWork.GetType().GetProperty(ObjectName);
+            ParamContainers pSetting = (ParamContainers)PsInfo.GetValue(Parameters.ParamWork, null);
             if (pSetting == null) return;
             // ------------
             Color SelectColor = ColorTranslator.FromHtml("#000038");
