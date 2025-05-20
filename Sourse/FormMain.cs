@@ -1,20 +1,17 @@
-﻿
-using Newtonsoft.Json;
-// ------------ 
-using S22.Imap;
+﻿using S22.Imap;
+// ------------
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Drawing;
-using System.Drawing.Drawing2D;
 using System.Linq;
+using System.Drawing;
 using System.Reflection;
+using System.Diagnostics;
+using System.Windows.Forms;
+using System.Drawing.Drawing2D;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using System.Runtime.Remoting.Contexts;
-using System.Text;
 // ------------ !!!
 using System.Threading.Tasks; // Не удалять, используется в Release !!!
-using System.Windows.Forms;
+
 
 // ==============================================================
 namespace MailNotifier
