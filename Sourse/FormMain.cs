@@ -1,4 +1,6 @@
-﻿using S22.Imap;
+﻿using System.Threading.Tasks; //  Не удалять!!!
+// ------------ Не удалять, используется в Release !!!
+using S22.Imap;
 // ------------
 using System;
 using System.Linq;
@@ -9,8 +11,6 @@ using System.Windows.Forms;
 using System.Drawing.Drawing2D;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
-// ------------ !!!
-using System.Threading.Tasks; // Не удалять, используется в Release !!!
 
 
 // ==============================================================
@@ -99,7 +99,10 @@ namespace MailNotifier
                 // ------------
                 var tmp = Task.Run(async delegate { await Task.Delay(500); });
                 tmp.Wait();
+                // ------------
                 UpdateAllAccounts();
+                PanelSettingsAccount.Padding = new Padding(4, 44, 4, 11);
+                PanelSettingsProgramm.Padding = new Padding(4, 44, 4, 11);
             #endif
         }
 
@@ -467,7 +470,7 @@ namespace MailNotifier
                 default:
                     WorkAccount mAccount = Parameters.ParamWork.Accounts.Find(item => item.Name == sender.Name);
                     // ------------
-                    if (sender.isMenu) {
+                    if (sender.IsMenu) {
                         if (mAccount != null) OpenAccountInBrowser(mAccount);
                         return; }
                     // ------------
@@ -674,12 +677,12 @@ namespace MailNotifier
             // ------------ ------------
             ButtonPanel CurrentItemButton = new ButtonPanel(null, "Update")
             {
-                isMenu = true,
-                isCount = false,
+                IsMenu = true,
+                IsCount = false,
                 IconName = "TrayUpdate48.png",
                 Caption = "Перечитать почту",
             };
-            CurrentItemButton.initialize();
+            CurrentItemButton.Iinitialize();
             // ------------
             PanelMenuItem CurrentItem = new PanelMenuItem(CurrentItemButton, new Size(260, 28));
             CurrentItem.Margin = new Padding(-6, 0, 9, 0);
@@ -689,12 +692,12 @@ namespace MailNotifier
             // ------------ ------------
             CurrentItemButton = new ButtonPanel(null, "Tray")
             {
-                isMenu = true,
-                isCount = false,
+                IsMenu = true,
+                IsCount = false,
                 IconName = "MenuToTray48.png",
                 Caption = "Сврнуть окно настроек",
             };
-            CurrentItemButton.initialize();
+            CurrentItemButton.Iinitialize();
             // ------------
             CurrentItem = new PanelMenuItem(CurrentItemButton, new Size(260, 28));
             CurrentItem.Margin = new Padding(-6, 0, 9, 0);
@@ -707,12 +710,12 @@ namespace MailNotifier
             // ------------ ------------
             ButtonPanel CurrentItemButton1 = new ButtonPanel(null, "Exit")
             {
-                isMenu = true,
-                isCount = false,
+                IsMenu = true,
+                IsCount = false,
                 IconName = "MunuExit48.png",
                 Caption = "Выйти из программы",
             };
-            CurrentItemButton1.initialize();
+            CurrentItemButton1.Iinitialize();
             // ------------
             CurrentItem = new PanelMenuItem(CurrentItemButton1, new Size(260, 28));
             CurrentItem.Margin = new Padding(-6, 0, 9, 0);
@@ -732,12 +735,12 @@ namespace MailNotifier
             // ------------
             ButtonPanel BtnElement = new ButtonPanel(mAccount)
             {
-                isMenu = false,
+                IsMenu = false,
                 Count = mAccount.Count,
-                isAlert = mAccount.IsError,
+                IsAlert = mAccount.IsError,
                 IconColor = ColorTranslator.FromHtml(mAccount.Account.Color),
             };
-            BtnElement.initialize();
+            BtnElement.Iinitialize();
             // ------------
             BtnContainer.Controls.Add(BtnElement.BtnPanel);
             MainLeftPanel.Controls.Add(BtnContainer);
@@ -747,12 +750,12 @@ namespace MailNotifier
             // ------------ ------------
             ButtonPanel MenuElement = new ButtonPanel(mAccount)
             {
-                isMenu = true,
+                IsMenu = true,
                 Count = mAccount.Count,
-                isAlert = mAccount.IsError,
+                IsAlert = mAccount.IsError,
                 IconColor = ColorTranslator.FromHtml(mAccount.Account.Color),
             };
-            MenuElement.initialize();
+            MenuElement.Iinitialize();
             // ------------
             PanelMenuItem CurrentItem = new PanelMenuItem(MenuElement, new Size(260, 28));
             CurrentItem.Margin = new Padding(-6, 0, 9, 0);

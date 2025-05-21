@@ -37,7 +37,6 @@ namespace MailNotifier
     // ==============================================================
     #region ===========   Общие сохраняемые параметры    ============
     // ------------
-
     public class ParametersSave
     {
         public SaveSettings FileSetting { get; set; } = new SaveSettings();

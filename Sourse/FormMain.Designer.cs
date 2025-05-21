@@ -44,6 +44,7 @@ namespace MailNotifier
             this.ButtonFormHeaderAdmin = new System.Windows.Forms.Button();
             this.ButtonFormHeaderMenu = new System.Windows.Forms.Button();
             this.ButtonFormHeaderTray = new System.Windows.Forms.Button();
+            this.CaptionFormMain = new MailNotifier.ColorLabel(this.components);
             this.PictureFormMainHeader = new System.Windows.Forms.PictureBox();
             this.StatusFormMain = new System.Windows.Forms.StatusStrip();
             this.StatusFormMainMode = new System.Windows.Forms.ToolStripStatusLabel();
@@ -57,6 +58,7 @@ namespace MailNotifier
             this.ToolsAnonLabel = new System.Windows.Forms.Label();
             this.MainLeftPanel = new System.Windows.Forms.Panel();
             this.EditComboBoxPanel = new System.Windows.Forms.Panel();
+            this.flatComboBox1 = new MailNotifier.FlatComboBox(this.components);
             this.PanelSetInfoAccount = new System.Windows.Forms.Panel();
             this.InfoError = new System.Windows.Forms.TextBox();
             this.InfoLastCheck = new System.Windows.Forms.Label();
@@ -74,16 +76,14 @@ namespace MailNotifier
             this.LoginLabel = new System.Windows.Forms.Label();
             this.PanelSettingSeparator = new System.Windows.Forms.Panel();
             this.ToolsTabPanel = new System.Windows.Forms.TableLayoutPanel();
+            this.RightLinkInfo = new MailNotifier.UnderlinedLabel(this.components);
+            this.RightLinkProgramm = new MailNotifier.UnderlinedLabel(this.components);
+            this.RightLinkAccount = new MailNotifier.UnderlinedLabel(this.components);
             this.MainImageList = new System.Windows.Forms.ImageList(this.components);
             this.MainContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.TimerTrayClick = new System.Windows.Forms.Timer(this.components);
             this.TimerTrayShow = new System.Windows.Forms.Timer(this.components);
             this.TimerTrayMail = new System.Windows.Forms.Timer(this.components);
-            this.flatComboBox1 = new MailNotifier.FlatComboBox(this.components);
-            this.RightLinkInfo = new MailNotifier.UnderlinedLabel(this.components);
-            this.RightLinkProgramm = new MailNotifier.UnderlinedLabel(this.components);
-            this.RightLinkAccount = new MailNotifier.UnderlinedLabel(this.components);
-            this.CaptionFormMain = new MailNotifier.ColorLabel(this.components);
             this.PanelFormMainHeader.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.PictureFormMainHeader)).BeginInit();
             this.StatusFormMain.SuspendLayout();
@@ -187,6 +187,19 @@ namespace MailNotifier
             this.ButtonFormHeaderTray.Click += new System.EventHandler(this.ButtonFormHeaderToTray_Click);
             this.ButtonFormHeaderTray.MouseLeave += new System.EventHandler(this.ButtonFormHeaderTray_MouseLeave);
             this.ButtonFormHeaderTray.MouseHover += new System.EventHandler(this.ButtonFormHeaderTray_MouseHover);
+            // 
+            // CaptionFormMain
+            // 
+            this.CaptionFormMain.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.CaptionFormMain.Enabled = false;
+            this.CaptionFormMain.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.CaptionFormMain.ForeColor = System.Drawing.Color.Gainsboro;
+            this.CaptionFormMain.Location = new System.Drawing.Point(0, 0);
+            this.CaptionFormMain.Name = "CaptionFormMain";
+            this.CaptionFormMain.Size = new System.Drawing.Size(818, 36);
+            this.CaptionFormMain.TabIndex = 3;
+            this.CaptionFormMain.Text = "Mail Notifier";
+            this.CaptionFormMain.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // PictureFormMainHeader
             // 
@@ -381,8 +394,21 @@ namespace MailNotifier
             this.EditComboBoxPanel.Location = new System.Drawing.Point(22, 328);
             this.EditComboBoxPanel.Name = "EditComboBoxPanel";
             this.EditComboBoxPanel.Padding = new System.Windows.Forms.Padding(0, 3, 0, 0);
-            this.EditComboBoxPanel.Size = new System.Drawing.Size(355, 30);
+            this.EditComboBoxPanel.Size = new System.Drawing.Size(358, 30);
             this.EditComboBoxPanel.TabIndex = 0;
+            // 
+            // flatComboBox1
+            // 
+            this.flatComboBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(56)))));
+            this.flatComboBox1.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(56)))));
+            this.flatComboBox1.ButtonColor = System.Drawing.Color.DarkGray;
+            this.flatComboBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.flatComboBox1.ForeColor = System.Drawing.Color.Gainsboro;
+            this.flatComboBox1.FormattingEnabled = true;
+            this.flatComboBox1.Location = new System.Drawing.Point(0, 3);
+            this.flatComboBox1.Name = "flatComboBox1";
+            this.flatComboBox1.Size = new System.Drawing.Size(358, 24);
+            this.flatComboBox1.TabIndex = 0;
             // 
             // PanelSetInfoAccount
             // 
@@ -449,18 +475,18 @@ namespace MailNotifier
             this.PanelSettingsAccount.Location = new System.Drawing.Point(0, 39);
             this.PanelSettingsAccount.Margin = new System.Windows.Forms.Padding(3, 3, 13, 3);
             this.PanelSettingsAccount.Name = "PanelSettingsAccount";
-            this.PanelSettingsAccount.Padding = new System.Windows.Forms.Padding(4, 45, 4, 11);
+            this.PanelSettingsAccount.Padding = new System.Windows.Forms.Padding(4, 9, 4, 11);
             this.PanelSettingsAccount.Size = new System.Drawing.Size(535, 343);
             this.PanelSettingsAccount.TabIndex = 9;
             // 
             // SplitContainerParamAccount
             // 
             this.SplitContainerParamAccount.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.SplitContainerParamAccount.Location = new System.Drawing.Point(4, 45);
+            this.SplitContainerParamAccount.Location = new System.Drawing.Point(4, 9);
             this.SplitContainerParamAccount.Name = "SplitContainerParamAccount";
             this.SplitContainerParamAccount.Panel1MinSize = 30;
             this.SplitContainerParamAccount.Panel2MinSize = 70;
-            this.SplitContainerParamAccount.Size = new System.Drawing.Size(527, 287);
+            this.SplitContainerParamAccount.Size = new System.Drawing.Size(527, 323);
             this.SplitContainerParamAccount.SplitterDistance = 68;
             this.SplitContainerParamAccount.TabIndex = 0;
             // 
@@ -472,18 +498,18 @@ namespace MailNotifier
             this.PanelSettingsProgramm.Location = new System.Drawing.Point(0, 39);
             this.PanelSettingsProgramm.Margin = new System.Windows.Forms.Padding(3, 3, 13, 3);
             this.PanelSettingsProgramm.Name = "PanelSettingsProgramm";
-            this.PanelSettingsProgramm.Padding = new System.Windows.Forms.Padding(4, 45, 4, 11);
+            this.PanelSettingsProgramm.Padding = new System.Windows.Forms.Padding(4, 9, 4, 11);
             this.PanelSettingsProgramm.Size = new System.Drawing.Size(535, 343);
             this.PanelSettingsProgramm.TabIndex = 8;
             // 
             // SplitContainerParamProgramm
             // 
             this.SplitContainerParamProgramm.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.SplitContainerParamProgramm.Location = new System.Drawing.Point(4, 45);
+            this.SplitContainerParamProgramm.Location = new System.Drawing.Point(4, 9);
             this.SplitContainerParamProgramm.Name = "SplitContainerParamProgramm";
             this.SplitContainerParamProgramm.Panel1MinSize = 40;
             this.SplitContainerParamProgramm.Panel2MinSize = 80;
-            this.SplitContainerParamProgramm.Size = new System.Drawing.Size(527, 287);
+            this.SplitContainerParamProgramm.Size = new System.Drawing.Size(527, 323);
             this.SplitContainerParamProgramm.SplitterDistance = 169;
             this.SplitContainerParamProgramm.TabIndex = 0;
             // 
@@ -601,56 +627,6 @@ namespace MailNotifier
             this.ToolsTabPanel.Size = new System.Drawing.Size(535, 28);
             this.ToolsTabPanel.TabIndex = 5;
             // 
-            // MainImageList
-            // 
-            this.MainImageList.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("MainImageList.ImageStream")));
-            this.MainImageList.TransparentColor = System.Drawing.Color.Transparent;
-            this.MainImageList.Images.SetKeyName(0, "MailNotifier48.png");
-            this.MainImageList.Images.SetKeyName(1, "Account48.png");
-            this.MainImageList.Images.SetKeyName(2, "MunuExit48.png");
-            this.MainImageList.Images.SetKeyName(3, "MenuFromTray48.png");
-            this.MainImageList.Images.SetKeyName(4, "MenuToTray48.png");
-            this.MainImageList.Images.SetKeyName(5, "TrayUpdate48.png");
-            this.MainImageList.Images.SetKeyName(6, "TrayClosed48.png");
-            this.MainImageList.Images.SetKeyName(7, "TrayOpen48.png");
-            this.MainImageList.Images.SetKeyName(8, "MyQst.png");
-            this.MainImageList.Images.SetKeyName(9, "MyInf.png");
-            this.MainImageList.Images.SetKeyName(10, "MyErr.png");
-            // 
-            // MainContextMenu
-            // 
-            this.MainContextMenu.Name = "contextMenuStrip1";
-            this.MainContextMenu.Size = new System.Drawing.Size(61, 4);
-            // 
-            // TimerTrayClick
-            // 
-            this.TimerTrayClick.Interval = 250;
-            this.TimerTrayClick.Tick += new System.EventHandler(this.TimerTrayClick_Tick);
-            // 
-            // TimerTrayShow
-            // 
-            this.TimerTrayShow.Interval = 600;
-            this.TimerTrayShow.Tag = "TrayClosed48.png";
-            this.TimerTrayShow.Tick += new System.EventHandler(this.TimerTrayShow_Tick);
-            // 
-            // TimerTrayMail
-            // 
-            this.TimerTrayMail.Interval = 300000;
-            this.TimerTrayMail.Tick += new System.EventHandler(this.TimerTrayMail_Tick);
-            // 
-            // flatComboBox1
-            // 
-            this.flatComboBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(56)))));
-            this.flatComboBox1.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(56)))));
-            this.flatComboBox1.ButtonColor = System.Drawing.Color.DarkGray;
-            this.flatComboBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.flatComboBox1.ForeColor = System.Drawing.Color.Gainsboro;
-            this.flatComboBox1.FormattingEnabled = true;
-            this.flatComboBox1.Location = new System.Drawing.Point(0, 3);
-            this.flatComboBox1.Name = "flatComboBox1";
-            this.flatComboBox1.Size = new System.Drawing.Size(355, 24);
-            this.flatComboBox1.TabIndex = 0;
-            // 
             // RightLinkInfo
             // 
             this.RightLinkInfo.ActiveLinkColor = System.Drawing.Color.WhiteSmoke;
@@ -708,18 +684,42 @@ namespace MailNotifier
             this.RightLinkAccount.MouseLeave += new System.EventHandler(this.RightLink_MouseLeave);
             this.RightLinkAccount.MouseHover += new System.EventHandler(this.RightLink_MouseHover);
             // 
-            // CaptionFormMain
+            // MainImageList
             // 
-            this.CaptionFormMain.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.CaptionFormMain.Enabled = false;
-            this.CaptionFormMain.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.CaptionFormMain.ForeColor = System.Drawing.Color.Gainsboro;
-            this.CaptionFormMain.Location = new System.Drawing.Point(0, 0);
-            this.CaptionFormMain.Name = "CaptionFormMain";
-            this.CaptionFormMain.Size = new System.Drawing.Size(818, 36);
-            this.CaptionFormMain.TabIndex = 3;
-            this.CaptionFormMain.Text = "Mail Notifier";
-            this.CaptionFormMain.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.MainImageList.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("MainImageList.ImageStream")));
+            this.MainImageList.TransparentColor = System.Drawing.Color.Transparent;
+            this.MainImageList.Images.SetKeyName(0, "MailNotifier48.png");
+            this.MainImageList.Images.SetKeyName(1, "Account48.png");
+            this.MainImageList.Images.SetKeyName(2, "MunuExit48.png");
+            this.MainImageList.Images.SetKeyName(3, "MenuFromTray48.png");
+            this.MainImageList.Images.SetKeyName(4, "MenuToTray48.png");
+            this.MainImageList.Images.SetKeyName(5, "TrayUpdate48.png");
+            this.MainImageList.Images.SetKeyName(6, "TrayClosed48.png");
+            this.MainImageList.Images.SetKeyName(7, "TrayOpen48.png");
+            this.MainImageList.Images.SetKeyName(8, "MyQst.png");
+            this.MainImageList.Images.SetKeyName(9, "MyInf.png");
+            this.MainImageList.Images.SetKeyName(10, "MyErr.png");
+            // 
+            // MainContextMenu
+            // 
+            this.MainContextMenu.Name = "contextMenuStrip1";
+            this.MainContextMenu.Size = new System.Drawing.Size(61, 4);
+            // 
+            // TimerTrayClick
+            // 
+            this.TimerTrayClick.Interval = 250;
+            this.TimerTrayClick.Tick += new System.EventHandler(this.TimerTrayClick_Tick);
+            // 
+            // TimerTrayShow
+            // 
+            this.TimerTrayShow.Interval = 600;
+            this.TimerTrayShow.Tag = "TrayClosed48.png";
+            this.TimerTrayShow.Tick += new System.EventHandler(this.TimerTrayShow_Tick);
+            // 
+            // TimerTrayMail
+            // 
+            this.TimerTrayMail.Interval = 300000;
+            this.TimerTrayMail.Tick += new System.EventHandler(this.TimerTrayMail_Tick);
             // 
             // FormMain
             // 
