@@ -1,22 +1,23 @@
 ﻿using System;
 using Newtonsoft.Json;
 using System.Windows.Forms;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 
 // ==============================================================
 namespace MailNotifier
 {
-    // ========================================================= Настройки приложения
+    // ==============================================================
+    #region ===========   Рабочие настройки приложения   ============
+    // ------------
     public class ParametersMain
     {
         // ==========================================================================
         #region ====================    Глобальные переменные    ====================
         // ------------
         private readonly String ExePatch = Application.ExecutablePath;  // Путь исполняемого файла приложения     
-        // ------------ 
         public ParametersWork ParamWork { get; } = new ParametersWork();  // Рабочие настройки приложения 
-        public ParametersSave ParamSave { get; } = new ParametersSave();  // Рабочие настройки приложения 
         // ------------
         #endregion
 
@@ -46,7 +47,7 @@ namespace MailNotifier
             // ------------
             try
             {
-                CurrrentFileSettings = JsonConvert.DeserializeObject<ParametersSave>(JsonText);
+                CurrrentFileSettings = JsonConvert.DeserializeObject<ParametersSave>(JsonText); /////!!!!!~~~~~ + "zzz"
                 ParamWork.Settings.SavedSettings = CurrrentFileSettings.FileSetting;              
             }
             // ------------
@@ -125,4 +126,18 @@ namespace MailNotifier
         // ------------
         #endregion
     }
+    // ------------
+    #endregion
+
+
+    // ==============================================================
+    #region ===========   Общие сохраняемые параметры    ============
+    // ------------
+    public class ParametersSave
+    {
+        public SaveSettings FileSetting { get; set; } = new SaveSettings();
+        public List<SaveAccount> FileAccount { get; set; } = new List<SaveAccount>();
+    }
+    // ------------
+    #endregion
 }

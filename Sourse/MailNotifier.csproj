@@ -148,7 +148,6 @@
     <Compile Include="FormMain.Designer.cs">
       <DependentUpon>FormMain.cs</DependentUpon>
     </Compile>
-    <Compile Include="PredefinedElements.cs" />
     <Compile Include="PanelsMenu.cs" />
     <Compile Include="ParametersWork.cs" />
     <Compile Include="ParametersMain.cs" />

@@ -1,16 +1,17 @@
-﻿using System.Threading.Tasks; //  Не удалять!!!
-// ------------ Не удалять, используется в Release !!!
+﻿// ------------ Не удалять, используется в Release !!!
 using S22.Imap;
 // ------------
 using System;
-using System.Linq;
-using System.Drawing;
-using System.Reflection;
-using System.Diagnostics;
-using System.Windows.Forms;
-using System.Drawing.Drawing2D;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Linq;
+using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Security.Cryptography;
+using System.Threading.Tasks; //  Не удалять!!!
+using System.Windows.Forms;
 
 
 // ==============================================================
@@ -37,7 +38,6 @@ namespace MailNotifier
         // ==========================================================================
         #region ========================    Конструктор      ========================
         // ------------
-
         public FormMain()
         {
             InitializeComponent();
@@ -58,8 +58,7 @@ namespace MailNotifier
 
         // ==========================================================================
         #region ===================    Основные события формы     ===================
-        // ------------
-        
+        /* ------------*/
         // ==================================== /////!!!!!
         private void PanelFormMain_Paint(object sender, PaintEventArgs e)
         {
@@ -83,10 +82,18 @@ namespace MailNotifier
             #endif
             // ------------
             SetDoubleBuffered(this, true);
-            SetDoubleBuffered(PanelFormMain, true);
-            SetDoubleBuffered(MainSplitContainer, true);
+            SetDoubleBuffered(PanelFormMain, true);            
             SetDoubleBuffered(MainLeftPanel, true);
             SetDoubleBuffered(ToolsTabPanel, true);
+            SetDoubleBuffered(ToolsAdminPanel, true);            
+            SetDoubleBuffered(PanelAutorization, true);
+            SetDoubleBuffered(MainSplitContainer, true);
+            SetDoubleBuffered(PropertyGridAccount, true);
+            SetDoubleBuffered(PanelSettingsAccount, true);
+            SetDoubleBuffered(PanelSettingsProgramm, true);
+            SetDoubleBuffered(PanelSettingSeparator, true);
+            SetDoubleBuffered(MainSplitContainer.Panel1, true);
+            SetDoubleBuffered(MainSplitContainer.Panel2, true);
             // ------------
             Rectangle Resolution = Screen.PrimaryScreen.Bounds;
             Location = new Point(
@@ -94,7 +101,8 @@ namespace MailNotifier
                 Resolution.Bottom - Bounds.Height - 55);
             // ------------  Запрет автопроверки почты в режиме debug
             #if !DEBUG
-                TimerTrayMail.Interval =  Parameters.ParamWork.Settings.SavedSettings.Period;
+                Periods SavesPeriod = Parameters.ParamWork.Settings.SavedSettings.Period;
+                TimerTrayMail.Interval = PeriodToMilliseconds(SavesPeriod);
                 TimerTrayMail.Start();
                 // ------------
                 var tmp = Task.Run(async delegate { await Task.Delay(500); });
@@ -255,173 +263,35 @@ namespace MailNotifier
                 PanelAutorization.Visible = true; }
         }
         // ------------
-#endregion
+        #endregion
 
 
         // ==========================================================================
         #region ===============  Функции панелей настройки Editors   ================
-        // ------------
+        /*------------*/
+        // ==================================== /////!!!!!
+        public int PeriodToMilliseconds(Periods Into)
+        {
+            return int.Parse(Into.ToString().Replace("m", ""));
+        }
 
         // ==================================== /////!!!!!
-        private void ParamLabel_Click(object sender, EventArgs e)
+        public Periods MillisecondsToPeriod(int Into)
         {
-            Label curLabel = (Label)sender;
-            string namelabel = curLabel.Name;
-            bool isName = namelabel.IndexOf("nameL_") >= 0;
-            string fullNameParam = namelabel.Replace(isName ? "nameL_" : "valueL_", "");
-            // ------------
-            var arrNamePram = fullNameParam.Split('_');
-            if (arrNamePram.Length != 2) return;
-            // ------------           
-            string nameParam = arrNamePram[1];
-            string ObjectName = arrNamePram[0] + "Editor";
-            // ------------
-            var PsInfo = Parameters.ParamWork.GetType().GetProperty(ObjectName);
-            ParamContainers pSetting = (ParamContainers)PsInfo.GetValue(Parameters.ParamWork, null);
-            if (pSetting == null) return;
-            // ------------
-            Color SelectColor = ColorTranslator.FromHtml("#000038");
-            foreach (ParamElement pElement in pSetting.Elements)
-            {
-                bool isCurLabel = (pElement.LabellName == curLabel) || (pElement.LabellValue == curLabel);
-                pElement.LabellValue.BackColor = isCurLabel ? SelectColor : Color.Transparent;
-                pElement.LabellName.BackColor = isCurLabel ? SelectColor : Color.Transparent;
-            }
-            // ------------
-            if (isName) return;
-            // ------------ ------------ /////!!!!! вызов замены элемента формы 
-
+            return (Periods)Enum.Parse(typeof(Periods), Into.ToString());
         }
 
         // ==================================== /////!!!!!
         private void UpdateAccuuntPanel()
         {
-            // -----------
-            if ( Parameters.ParamWork.Settings.CurrentAccount == null) return;
-            // -----------
-            string pString =  Parameters.ParamWork.AccountParams;
-            ParamContainers pSetElement = Parameters.ParamWork.AccountEditor;
-            SplitContainer Container = SplitContainerParamAccount;
-            SaveAccount Account =  Parameters.ParamWork.Settings.CurrentAccount.Account;
-            // ------------
-            var arrPram = pString.Split((char)9679);
-            foreach (var gridRowParam in arrPram)
-            {
-                var arrRowPram = gridRowParam.Split((char)9678);
-                if (arrRowPram.Length != 4) continue;
-                // ------------
-                ParamElement Element = pSetElement.Elements.First(obj => obj.Name == arrRowPram[0]);
-                // ------------
-                var PsInfo = Account.GetType().GetProperty(arrRowPram[0]);
-                string vString = PsInfo.GetValue(Account, null).ToString();
-                if (vString == null) vString = "Undefined";
-                // ------------
-                switch (arrRowPram[2])
-                {
-                    case "Password":
-                        Element.LabellValue.Text = new string((char)9679, vString.Length);
-                        break;
-                    default:
-                        Element.LabellValue.Text = vString;
-                        break;
-                }
-                // ------------
-                if (arrRowPram[3] == "Color") 
-                    Element.LabellValue.ForeColor = ColorTranslator.FromHtml(vString);
-            }
+            if (Parameters.ParamWork.Settings.CurrentAccount == null) return;
+            PropertyGridAccount.SelectedObject = Parameters.ParamWork.Settings.CurrentAccount.Account;
         }
 
         // ==================================== /////!!!!!
-        private void CreateParamPanel(string ContainerName, string gridRowParam, ParamContainers pSetElement)
+        private void UpdateParametersPanel()
         {
-            var arrRowPram = gridRowParam.Split((char)9678);
-            if (arrRowPram.Length != 4) { return; } /////!!!!! message about error
-            // ------------
-            ParamElement curElement = new ParamElement();
-            curElement.ParamString = gridRowParam;
-            curElement.Name = arrRowPram[0];
-            // ------------ ------------
-            Label NameLabel = new Label();
-            NameLabel.Tag = arrRowPram[3];
-            NameLabel.Margin = new Padding(0);
-            NameLabel.Size = new Size(100, 30);
-            NameLabel.Text = arrRowPram[1] + ":";
-            NameLabel.ForeColor = Color.Gainsboro;
-            NameLabel.BackColor = Color.Transparent;
-            NameLabel.Padding = new Padding(3, 0, 0, 0);
-            NameLabel.TextAlign = ContentAlignment.MiddleLeft;
-            NameLabel.Name = "nameL_" + ContainerName + "_" + arrRowPram[0];
-            // ------------
-            pSetElement.Container.Panel1.Controls.Add(NameLabel);
-            NameLabel.Dock = DockStyle.Top;
-            NameLabel.Click += ParamLabel_Click;
-            // ------------
-            curElement.LabellName = NameLabel;
-            // ------------ ------------
-            Label ValueLabel = new Label();
-            ValueLabel.Tag = arrRowPram[3];
-            ValueLabel.Margin = new Padding(0);
-            ValueLabel.Size = new Size(100, 30);
-            ValueLabel.ForeColor = Color.Gainsboro;
-            ValueLabel.BackColor = Color.Transparent;
-            NameLabel.Padding = new Padding(3, 0, 3, 0);
-            ValueLabel.TextAlign = ContentAlignment.MiddleLeft;
-            ValueLabel.Name = "valueL_" + ContainerName + "_" + arrRowPram[0];
-            // ------------
-            var PInfo =  Parameters.ParamWork.Settings.SavedSettings.GetType().GetProperty(arrRowPram[0]);
-            var pValue = PInfo == null ? "" : PInfo.GetValue(Parameters.ParamWork.Settings.SavedSettings, null);
-            // ------------
-            switch (arrRowPram[2])
-            {
-                case "Bool":
-                    ValueLabel.Text = ((bool)pValue) ? "Да" : "Нет";
-                    break;
-                case "Password":
-                    ValueLabel.Text = new string((char)9679, ((string)pValue).Length);
-                    break;
-                case "Period":
-                    ValueLabel.Text = ((int)pValue / 60000).ToString() + " мин.";
-                    break;
-                default:
-                    ValueLabel.Text = pValue.ToString();
-                    break;
-            }
-            // ------------
-            pSetElement.Container.Panel2.Controls.Add(ValueLabel);
-            ValueLabel.Dock = DockStyle.Top;
-            ValueLabel.Click += ParamLabel_Click;
-            // ------------
-            curElement.LabellValue = ValueLabel;
-            // ------------ ------------
-            pSetElement.Elements.Add(curElement);
-        }
-
-        // ==================================== /////!!!!!
-        public void CreateParametersPanels(string ContainerName)
-        {
-            // ------------
-            String varName = "SplitContainerParam" + ContainerName;
-            var Containers = this.Controls.Find(varName, true);
-            if (Containers == null) { return; } /////!!!!! message about error
-            if (Containers.Length < 1) { return; } /////!!!!! message about error
-            SplitContainer Container = (SplitContainer)Containers[0];
-            // ------------
-            varName = ContainerName + "Params";
-            var PsInfo =  Parameters.ParamWork.GetType().GetProperty(varName);
-            string pString = (string)PsInfo.GetValue( Parameters.ParamWork, null);
-            if (pString == null) { return; } /////!!!!! message about error
-            // ------------
-            ParamContainers pSetElement = new ParamContainers(Container);
-            pSetElement.Elements = new List<ParamElement>();
-            pSetElement.EditEnable = false;
-            pSetElement.EditControl = null;
-            // ------------
-            var arrPram = pString.Split((char)9679);
-            foreach (var gridRowParam in arrPram)
-                CreateParamPanel(ContainerName, gridRowParam, pSetElement);
-            // ------------
-            var PrInfo = Parameters.ParamWork.GetType().GetProperty(ContainerName + "Editor");
-            PrInfo.SetValue(Parameters.ParamWork, pSetElement);
+            PropertyGridProgramm.SelectedObject = Parameters.ParamWork.Settings.SavedSettings;
         }
         // ------------
         #endregion
@@ -429,8 +299,7 @@ namespace MailNotifier
 
         // ==========================================================================
         #region ===============  Функции внешнего вызова из классов  ================
-        // ------------
-
+        /* ------------*/
         // ==================================== /////!!!!!
         private void ErrorMessageShow(String ErrorMessage)
         {
@@ -476,15 +345,17 @@ namespace MailNotifier
                     // ------------
                     else
                     {
-                        if ( Parameters.ParamWork.Settings.CurrentAccount != null) {
-                             Parameters.ParamWork.Settings.CurrentAccount.LeftButton.BtnPanel.Controls["P_Caption"].ForeColor = Color.Gainsboro;
-                             Parameters.ParamWork.Settings.CurrentAccount.LeftButton.BtnPanel.BackColor = ColorTranslator.FromHtml("#00001a"); }
+                        if (Parameters.ParamWork.Settings.CurrentAccount != null) {
+                            WorkAccount CurrentAccount = Parameters.ParamWork.Settings.CurrentAccount;
+                            CurrentAccount.LeftButton.BtnPanel.Controls["P_Caption"].ForeColor = Color.Gainsboro;
+                            CurrentAccount.LeftButton.BtnPanel.BackColor = ColorTranslator.FromHtml("#00001a"); }
                         // ------------
                         if (mAccount != null) {
                             mAccount.LeftButton.BtnPanel.Controls["P_Caption"].ForeColor = Color.White;
                             mAccount.LeftButton.BtnPanel.BackColor = ColorTranslator.FromHtml("#005"); }
                         // ------------
-                         Parameters.ParamWork.Settings.CurrentAccount = ( Parameters.ParamWork.Settings.CurrentAccount == mAccount) ? null : mAccount;
+                        bool IsCurrent = Parameters.ParamWork.Settings.CurrentAccount == mAccount;
+                        Parameters.ParamWork.Settings.CurrentAccount = (IsCurrent) ? null : mAccount;
                         ShowAccountParameters(true);
                     }
                     break;
@@ -496,12 +367,11 @@ namespace MailNotifier
 
         // ==========================================================================
         #region =================  Обобщенные функции формы    ======================
-        // ------------
-
+        /* ------------*/
         // ------------ для скрытия иконки меню на панели задач
         [DllImport("User32.dll", ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern bool SetForegroundWindow(HandleRef hWnd);
-        // ------------
+        /* ------------*/
 
         // ==================================== /////!!!!!
         private void OpenTrayMenu()
@@ -581,8 +451,8 @@ namespace MailNotifier
             // ------------
             if (!Visible)
             {
-                 Parameters.ParamWork.Settings.IsAdmin = false;
-                 Parameters.ParamWork.Settings.CurrentAccount = null;
+                Parameters.ParamWork.Settings.IsAdmin = false;
+                Parameters.ParamWork.Settings.CurrentAccount = null;
                 RebuildElementsByAutorization();
                 ShowAccountParameters(true);
                 // ------------
@@ -624,6 +494,7 @@ namespace MailNotifier
              Parameters.ParamWork.Settings.IsUpdate = true;
             // ------------
              Parameters.ParamWork.Settings.Count = 0;
+            Parameters.ParamWork.Settings.CountBoxes = 0;
              Parameters.ParamWork.Settings.IsError = false;
             // ------------
             foreach (WorkAccount Account in Parameters.ParamWork.Accounts)
@@ -637,11 +508,12 @@ namespace MailNotifier
                 Account.MenuPanel.SetAlert(Account.IsError);
                 Account.LeftButton.SetAlert(Account.IsError);
                 // ------------
-                 Parameters.ParamWork.Settings.Count += Account.Count;
-                 Parameters.ParamWork.Settings.IsError =  Parameters.ParamWork.Settings.IsError || Account.IsError;
+                Parameters.ParamWork.Settings.Count += Account.Count;
+                Parameters.ParamWork.Settings.CountBoxes += (Account.Count == 0) ? 0 : 1;
+                Parameters.ParamWork.Settings.IsError = Parameters.ParamWork.Settings.IsError || Account.IsError;
             }
             // ------------
-             Parameters.ParamWork.Settings.LastCheck = DateTime.Now;
+            Parameters.ParamWork.Settings.LastCheck = DateTime.Now;
             StatusFormMainCount.Text = "Всего непрочитанных писем: " +  Parameters.ParamWork.Settings.Count.ToString();
             StatusFormMainTime.Text = "Последняя проверка почты: " +  Parameters.ParamWork.Settings.LastCheck.ToString();
             // ------------
@@ -653,7 +525,7 @@ namespace MailNotifier
                 TimerTrayShow.Start();
             }
             // ------------
-             Parameters.ParamWork.Settings.IsUpdate = false;
+            Parameters.ParamWork.Settings.IsUpdate = false;
         }
 
         // ==================================== /////!!!!!
@@ -667,8 +539,7 @@ namespace MailNotifier
 
         // ==========================================================================
         #region ============== Динамическое изменение элементов формы  ==============
-        // ------------
-
+        /* ------------*/
         // ==================================== /////!!!!!
         private void CreateFixedMenuitems()
         {
@@ -738,7 +609,7 @@ namespace MailNotifier
                 IsMenu = false,
                 Count = mAccount.Count,
                 IsAlert = mAccount.IsError,
-                IconColor = ColorTranslator.FromHtml(mAccount.Account.Color),
+                IconColor = mAccount.Account.Color,
             };
             BtnElement.Iinitialize();
             // ------------
@@ -753,7 +624,7 @@ namespace MailNotifier
                 IsMenu = true,
                 Count = mAccount.Count,
                 IsAlert = mAccount.IsError,
-                IconColor = ColorTranslator.FromHtml(mAccount.Account.Color),
+                IconColor =mAccount.Account.Color,
             };
             MenuElement.Iinitialize();
             // ------------
@@ -834,7 +705,7 @@ namespace MailNotifier
             // ------------
             StatusFormMainMode.Text = "Режим: администратор";
             // ------------
-            if ( Parameters.ParamWork.Settings.CurrentAccount != null)  RightLink_LinkClicked(RightLinkAccount, null);
+            if (Parameters.ParamWork.Settings.CurrentAccount != null)  RightLink_LinkClicked(RightLinkAccount, null);
             else if (!isInfo || !isProgrammVisible) RightLink_LinkClicked(RightLinkProgramm, null);
             else RightLink_LinkClicked(RightLinkInfo, null);
         }
@@ -873,8 +744,7 @@ namespace MailNotifier
             bool Res = Parameters.LoadSettings();
             // ------------
             RebuildElementsByParameters();
-            CreateParametersPanels("Programm");
-            CreateParametersPanels("Account");
+            UpdateParametersPanel();
             // ------------
             if (!Res) ErrorMessageShow( Parameters.ParamWork.Settings.ErrorText);
         }
@@ -905,8 +775,6 @@ namespace MailNotifier
             icTrayClose = Icon.FromHandle(((Bitmap)MainImageList.Images["TrayClosed48.png"]).GetHicon());
             icTrayUpdate = Icon.FromHandle(((Bitmap)MainImageList.Images["TrayUpdate48.png"]).GetHicon());
             // ------------
-            EditComboBoxPanel.Visible = false; /////!!!!!
-            // ------------
             NotifyIconMain.Icon = icTrayEmpty;
         }
         // ------------
@@ -915,8 +783,7 @@ namespace MailNotifier
 
         // ==========================================================================
         #region ===================       События TrayIcon        ===================
-        // ------------
-
+        /* ------------*/
         // ==================================== /////!!!!!
         private void TimerTrayClick_Tick(object sender, EventArgs e)
         {

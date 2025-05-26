@@ -44,7 +44,6 @@ namespace MailNotifier
             this.ButtonFormHeaderAdmin = new System.Windows.Forms.Button();
             this.ButtonFormHeaderMenu = new System.Windows.Forms.Button();
             this.ButtonFormHeaderTray = new System.Windows.Forms.Button();
-            this.CaptionFormMain = new MailNotifier.ColorLabel(this.components);
             this.PictureFormMainHeader = new System.Windows.Forms.PictureBox();
             this.StatusFormMain = new System.Windows.Forms.StatusStrip();
             this.StatusFormMainMode = new System.Windows.Forms.ToolStripStatusLabel();
@@ -57,17 +56,12 @@ namespace MailNotifier
             this.LeftLinkDel = new System.Windows.Forms.LinkLabel();
             this.ToolsAnonLabel = new System.Windows.Forms.Label();
             this.MainLeftPanel = new System.Windows.Forms.Panel();
-            this.EditComboBoxPanel = new System.Windows.Forms.Panel();
-            this.flatComboBox1 = new MailNotifier.FlatComboBox(this.components);
             this.PanelSetInfoAccount = new System.Windows.Forms.Panel();
             this.InfoError = new System.Windows.Forms.TextBox();
             this.InfoLastCheck = new System.Windows.Forms.Label();
             this.InfoMessages = new System.Windows.Forms.Label();
             this.InfoAccount = new System.Windows.Forms.Label();
-            this.PanelSettingsAccount = new System.Windows.Forms.Panel();
-            this.SplitContainerParamAccount = new System.Windows.Forms.SplitContainer();
             this.PanelSettingsProgramm = new System.Windows.Forms.Panel();
-            this.SplitContainerParamProgramm = new System.Windows.Forms.SplitContainer();
             this.PanelAutorization = new System.Windows.Forms.Panel();
             this.LoginPassword = new System.Windows.Forms.TextBox();
             this.UnloginLink = new System.Windows.Forms.LinkLabel();
@@ -76,14 +70,20 @@ namespace MailNotifier
             this.LoginLabel = new System.Windows.Forms.Label();
             this.PanelSettingSeparator = new System.Windows.Forms.Panel();
             this.ToolsTabPanel = new System.Windows.Forms.TableLayoutPanel();
-            this.RightLinkInfo = new MailNotifier.UnderlinedLabel(this.components);
-            this.RightLinkProgramm = new MailNotifier.UnderlinedLabel(this.components);
-            this.RightLinkAccount = new MailNotifier.UnderlinedLabel(this.components);
             this.MainImageList = new System.Windows.Forms.ImageList(this.components);
             this.MainContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.TimerTrayClick = new System.Windows.Forms.Timer(this.components);
             this.TimerTrayShow = new System.Windows.Forms.Timer(this.components);
             this.TimerTrayMail = new System.Windows.Forms.Timer(this.components);
+            this.PanelSettingsAccount = new System.Windows.Forms.Panel();
+            this.PropertyGridAccount = new System.Windows.Forms.PropertyGrid();
+            this.RightLinkInfo = new MailNotifier.UnderlinedLabel(this.components);
+            this.RightLinkProgramm = new MailNotifier.UnderlinedLabel(this.components);
+            this.RightLinkAccount = new MailNotifier.UnderlinedLabel(this.components);
+            this.CaptionFormMain = new MailNotifier.ColorLabel(this.components);
+            this.PropertyGridProgramm = new System.Windows.Forms.PropertyGrid();
+            this.ButtonErrorClear = new System.Windows.Forms.Button();
+            this.ButtonErrorCopy = new System.Windows.Forms.Button();
             this.PanelFormMainHeader.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.PictureFormMainHeader)).BeginInit();
             this.StatusFormMain.SuspendLayout();
@@ -93,16 +93,11 @@ namespace MailNotifier
             this.MainSplitContainer.Panel2.SuspendLayout();
             this.MainSplitContainer.SuspendLayout();
             this.ToolsAdminPanel.SuspendLayout();
-            this.EditComboBoxPanel.SuspendLayout();
             this.PanelSetInfoAccount.SuspendLayout();
-            this.PanelSettingsAccount.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.SplitContainerParamAccount)).BeginInit();
-            this.SplitContainerParamAccount.SuspendLayout();
             this.PanelSettingsProgramm.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.SplitContainerParamProgramm)).BeginInit();
-            this.SplitContainerParamProgramm.SuspendLayout();
             this.PanelAutorization.SuspendLayout();
             this.ToolsTabPanel.SuspendLayout();
+            this.PanelSettingsAccount.SuspendLayout();
             this.SuspendLayout();
             // 
             // NotifyIconMain
@@ -188,19 +183,6 @@ namespace MailNotifier
             this.ButtonFormHeaderTray.MouseLeave += new System.EventHandler(this.ButtonFormHeaderTray_MouseLeave);
             this.ButtonFormHeaderTray.MouseHover += new System.EventHandler(this.ButtonFormHeaderTray_MouseHover);
             // 
-            // CaptionFormMain
-            // 
-            this.CaptionFormMain.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.CaptionFormMain.Enabled = false;
-            this.CaptionFormMain.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.CaptionFormMain.ForeColor = System.Drawing.Color.Gainsboro;
-            this.CaptionFormMain.Location = new System.Drawing.Point(0, 0);
-            this.CaptionFormMain.Name = "CaptionFormMain";
-            this.CaptionFormMain.Size = new System.Drawing.Size(818, 36);
-            this.CaptionFormMain.TabIndex = 3;
-            this.CaptionFormMain.Text = "Mail Notifier";
-            this.CaptionFormMain.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
             // PictureFormMainHeader
             // 
             this.PictureFormMainHeader.BackColor = System.Drawing.Color.Transparent;
@@ -285,21 +267,20 @@ namespace MailNotifier
             this.MainSplitContainer.Panel1.BackColor = System.Drawing.Color.Transparent;
             this.MainSplitContainer.Panel1.Controls.Add(this.ToolsAdminPanel);
             this.MainSplitContainer.Panel1.Controls.Add(this.MainLeftPanel);
-            this.MainSplitContainer.Panel1MinSize = 260;
+            this.MainSplitContainer.Panel1MinSize = 275;
             // 
             // MainSplitContainer.Panel2
             // 
             this.MainSplitContainer.Panel2.BackColor = System.Drawing.Color.Transparent;
-            this.MainSplitContainer.Panel2.Controls.Add(this.EditComboBoxPanel);
             this.MainSplitContainer.Panel2.Controls.Add(this.PanelSetInfoAccount);
-            this.MainSplitContainer.Panel2.Controls.Add(this.PanelSettingsAccount);
             this.MainSplitContainer.Panel2.Controls.Add(this.PanelSettingsProgramm);
+            this.MainSplitContainer.Panel2.Controls.Add(this.PanelSettingsAccount);
             this.MainSplitContainer.Panel2.Controls.Add(this.PanelAutorization);
             this.MainSplitContainer.Panel2.Controls.Add(this.PanelSettingSeparator);
             this.MainSplitContainer.Panel2.Controls.Add(this.ToolsTabPanel);
-            this.MainSplitContainer.Panel2MinSize = 400;
+            this.MainSplitContainer.Panel2MinSize = 370;
             this.MainSplitContainer.Size = new System.Drawing.Size(818, 382);
-            this.MainSplitContainer.SplitterDistance = 280;
+            this.MainSplitContainer.SplitterDistance = 290;
             this.MainSplitContainer.SplitterWidth = 3;
             this.MainSplitContainer.TabIndex = 6;
             // 
@@ -383,45 +364,22 @@ namespace MailNotifier
             this.MainLeftPanel.Location = new System.Drawing.Point(3, 37);
             this.MainLeftPanel.Margin = new System.Windows.Forms.Padding(0);
             this.MainLeftPanel.Name = "MainLeftPanel";
-            this.MainLeftPanel.Size = new System.Drawing.Size(270, 337);
+            this.MainLeftPanel.Size = new System.Drawing.Size(280, 337);
             this.MainLeftPanel.TabIndex = 4;
-            // 
-            // EditComboBoxPanel
-            // 
-            this.EditComboBoxPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.EditComboBoxPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(56)))));
-            this.EditComboBoxPanel.Controls.Add(this.flatComboBox1);
-            this.EditComboBoxPanel.Location = new System.Drawing.Point(22, 328);
-            this.EditComboBoxPanel.Name = "EditComboBoxPanel";
-            this.EditComboBoxPanel.Padding = new System.Windows.Forms.Padding(0, 3, 0, 0);
-            this.EditComboBoxPanel.Size = new System.Drawing.Size(358, 30);
-            this.EditComboBoxPanel.TabIndex = 0;
-            // 
-            // flatComboBox1
-            // 
-            this.flatComboBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(56)))));
-            this.flatComboBox1.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(56)))));
-            this.flatComboBox1.ButtonColor = System.Drawing.Color.DarkGray;
-            this.flatComboBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.flatComboBox1.ForeColor = System.Drawing.Color.Gainsboro;
-            this.flatComboBox1.FormattingEnabled = true;
-            this.flatComboBox1.Location = new System.Drawing.Point(0, 3);
-            this.flatComboBox1.Name = "flatComboBox1";
-            this.flatComboBox1.Size = new System.Drawing.Size(358, 24);
-            this.flatComboBox1.TabIndex = 0;
             // 
             // PanelSetInfoAccount
             // 
             this.PanelSetInfoAccount.BackColor = System.Drawing.Color.Transparent;
+            this.PanelSetInfoAccount.Controls.Add(this.ButtonErrorCopy);
+            this.PanelSetInfoAccount.Controls.Add(this.ButtonErrorClear);
             this.PanelSetInfoAccount.Controls.Add(this.InfoError);
             this.PanelSetInfoAccount.Controls.Add(this.InfoLastCheck);
             this.PanelSetInfoAccount.Controls.Add(this.InfoMessages);
             this.PanelSetInfoAccount.Controls.Add(this.InfoAccount);
-            this.PanelSetInfoAccount.Dock = System.Windows.Forms.DockStyle.Fill;
             this.PanelSetInfoAccount.Location = new System.Drawing.Point(0, 39);
             this.PanelSetInfoAccount.Margin = new System.Windows.Forms.Padding(3, 3, 13, 3);
             this.PanelSetInfoAccount.Name = "PanelSetInfoAccount";
-            this.PanelSetInfoAccount.Size = new System.Drawing.Size(535, 343);
+            this.PanelSetInfoAccount.Size = new System.Drawing.Size(525, 343);
             this.PanelSetInfoAccount.TabIndex = 7;
             // 
             // InfoError
@@ -436,7 +394,7 @@ namespace MailNotifier
             this.InfoError.Multiline = true;
             this.InfoError.Name = "InfoError";
             this.InfoError.ReadOnly = true;
-            this.InfoError.Size = new System.Drawing.Size(518, 204);
+            this.InfoError.Size = new System.Drawing.Size(508, 204);
             this.InfoError.TabIndex = 6;
             // 
             // InfoLastCheck
@@ -467,51 +425,17 @@ namespace MailNotifier
             this.InfoAccount.TabIndex = 3;
             this.InfoAccount.Text = "Аккаунт: test_account@test-mail.ru";
             // 
-            // PanelSettingsAccount
-            // 
-            this.PanelSettingsAccount.BackColor = System.Drawing.Color.Transparent;
-            this.PanelSettingsAccount.Controls.Add(this.SplitContainerParamAccount);
-            this.PanelSettingsAccount.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.PanelSettingsAccount.Location = new System.Drawing.Point(0, 39);
-            this.PanelSettingsAccount.Margin = new System.Windows.Forms.Padding(3, 3, 13, 3);
-            this.PanelSettingsAccount.Name = "PanelSettingsAccount";
-            this.PanelSettingsAccount.Padding = new System.Windows.Forms.Padding(4, 9, 4, 11);
-            this.PanelSettingsAccount.Size = new System.Drawing.Size(535, 343);
-            this.PanelSettingsAccount.TabIndex = 9;
-            // 
-            // SplitContainerParamAccount
-            // 
-            this.SplitContainerParamAccount.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.SplitContainerParamAccount.Location = new System.Drawing.Point(4, 9);
-            this.SplitContainerParamAccount.Name = "SplitContainerParamAccount";
-            this.SplitContainerParamAccount.Panel1MinSize = 30;
-            this.SplitContainerParamAccount.Panel2MinSize = 70;
-            this.SplitContainerParamAccount.Size = new System.Drawing.Size(527, 323);
-            this.SplitContainerParamAccount.SplitterDistance = 68;
-            this.SplitContainerParamAccount.TabIndex = 0;
-            // 
             // PanelSettingsProgramm
             // 
             this.PanelSettingsProgramm.BackColor = System.Drawing.Color.Transparent;
-            this.PanelSettingsProgramm.Controls.Add(this.SplitContainerParamProgramm);
+            this.PanelSettingsProgramm.Controls.Add(this.PropertyGridProgramm);
             this.PanelSettingsProgramm.Dock = System.Windows.Forms.DockStyle.Fill;
             this.PanelSettingsProgramm.Location = new System.Drawing.Point(0, 39);
             this.PanelSettingsProgramm.Margin = new System.Windows.Forms.Padding(3, 3, 13, 3);
             this.PanelSettingsProgramm.Name = "PanelSettingsProgramm";
             this.PanelSettingsProgramm.Padding = new System.Windows.Forms.Padding(4, 9, 4, 11);
-            this.PanelSettingsProgramm.Size = new System.Drawing.Size(535, 343);
+            this.PanelSettingsProgramm.Size = new System.Drawing.Size(525, 343);
             this.PanelSettingsProgramm.TabIndex = 8;
-            // 
-            // SplitContainerParamProgramm
-            // 
-            this.SplitContainerParamProgramm.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.SplitContainerParamProgramm.Location = new System.Drawing.Point(4, 9);
-            this.SplitContainerParamProgramm.Name = "SplitContainerParamProgramm";
-            this.SplitContainerParamProgramm.Panel1MinSize = 40;
-            this.SplitContainerParamProgramm.Panel2MinSize = 80;
-            this.SplitContainerParamProgramm.Size = new System.Drawing.Size(527, 323);
-            this.SplitContainerParamProgramm.SplitterDistance = 169;
-            this.SplitContainerParamProgramm.TabIndex = 0;
             // 
             // PanelAutorization
             // 
@@ -524,7 +448,7 @@ namespace MailNotifier
             this.PanelAutorization.Dock = System.Windows.Forms.DockStyle.Fill;
             this.PanelAutorization.Location = new System.Drawing.Point(0, 39);
             this.PanelAutorization.Name = "PanelAutorization";
-            this.PanelAutorization.Size = new System.Drawing.Size(535, 343);
+            this.PanelAutorization.Size = new System.Drawing.Size(525, 343);
             this.PanelAutorization.TabIndex = 10;
             // 
             // LoginPassword
@@ -539,7 +463,7 @@ namespace MailNotifier
             this.LoginPassword.Margin = new System.Windows.Forms.Padding(3, 14, 3, 3);
             this.LoginPassword.Name = "LoginPassword";
             this.LoginPassword.PasswordChar = '*';
-            this.LoginPassword.Size = new System.Drawing.Size(276, 21);
+            this.LoginPassword.Size = new System.Drawing.Size(266, 21);
             this.LoginPassword.TabIndex = 2;
             this.LoginPassword.UseSystemPasswordChar = true;
             this.LoginPassword.WordWrap = false;
@@ -555,7 +479,7 @@ namespace MailNotifier
             this.UnloginLink.Location = new System.Drawing.Point(97, 69);
             this.UnloginLink.Name = "UnloginLink";
             this.UnloginLink.Padding = new System.Windows.Forms.Padding(0, 0, 4, 0);
-            this.UnloginLink.Size = new System.Drawing.Size(348, 20);
+            this.UnloginLink.Size = new System.Drawing.Size(338, 20);
             this.UnloginLink.TabIndex = 1;
             this.UnloginLink.TabStop = true;
             this.UnloginLink.Text = "Выйти из режима администрирования";
@@ -570,7 +494,7 @@ namespace MailNotifier
             | System.Windows.Forms.AnchorStyles.Right)));
             this.LoginInfoLabel.Location = new System.Drawing.Point(6, 59);
             this.LoginInfoLabel.Name = "LoginInfoLabel";
-            this.LoginInfoLabel.Size = new System.Drawing.Size(518, 39);
+            this.LoginInfoLabel.Size = new System.Drawing.Size(508, 39);
             this.LoginInfoLabel.TabIndex = 0;
             this.LoginInfoLabel.Text = "Для изменения настроек необходимо ввести пароль:";
             this.LoginInfoLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -582,7 +506,7 @@ namespace MailNotifier
             this.LoginErrorLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
             this.LoginErrorLabel.Location = new System.Drawing.Point(9, 141);
             this.LoginErrorLabel.Name = "LoginErrorLabel";
-            this.LoginErrorLabel.Size = new System.Drawing.Size(518, 27);
+            this.LoginErrorLabel.Size = new System.Drawing.Size(508, 27);
             this.LoginErrorLabel.TabIndex = 4;
             this.LoginErrorLabel.Text = "Прароль администратора не корректен...";
             this.LoginErrorLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -594,7 +518,7 @@ namespace MailNotifier
             this.LoginLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.LoginLabel.Location = new System.Drawing.Point(5, 34);
             this.LoginLabel.Name = "LoginLabel";
-            this.LoginLabel.Size = new System.Drawing.Size(522, 18);
+            this.LoginLabel.Size = new System.Drawing.Size(512, 18);
             this.LoginLabel.TabIndex = 3;
             this.LoginLabel.Text = "Авторизация";
             this.LoginLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -605,7 +529,7 @@ namespace MailNotifier
             this.PanelSettingSeparator.Dock = System.Windows.Forms.DockStyle.Top;
             this.PanelSettingSeparator.Location = new System.Drawing.Point(0, 28);
             this.PanelSettingSeparator.Name = "PanelSettingSeparator";
-            this.PanelSettingSeparator.Size = new System.Drawing.Size(535, 11);
+            this.PanelSettingSeparator.Size = new System.Drawing.Size(525, 11);
             this.PanelSettingSeparator.TabIndex = 6;
             // 
             // ToolsTabPanel
@@ -624,8 +548,86 @@ namespace MailNotifier
             this.ToolsTabPanel.Name = "ToolsTabPanel";
             this.ToolsTabPanel.RowCount = 1;
             this.ToolsTabPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.ToolsTabPanel.Size = new System.Drawing.Size(535, 28);
+            this.ToolsTabPanel.Size = new System.Drawing.Size(525, 28);
             this.ToolsTabPanel.TabIndex = 5;
+            // 
+            // MainImageList
+            // 
+            this.MainImageList.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("MainImageList.ImageStream")));
+            this.MainImageList.TransparentColor = System.Drawing.Color.Transparent;
+            this.MainImageList.Images.SetKeyName(0, "MailNotifier48.png");
+            this.MainImageList.Images.SetKeyName(1, "Account48.png");
+            this.MainImageList.Images.SetKeyName(2, "MunuExit48.png");
+            this.MainImageList.Images.SetKeyName(3, "MenuFromTray48.png");
+            this.MainImageList.Images.SetKeyName(4, "MenuToTray48.png");
+            this.MainImageList.Images.SetKeyName(5, "TrayUpdate48.png");
+            this.MainImageList.Images.SetKeyName(6, "TrayClosed48.png");
+            this.MainImageList.Images.SetKeyName(7, "TrayOpen48.png");
+            this.MainImageList.Images.SetKeyName(8, "MyQst.png");
+            this.MainImageList.Images.SetKeyName(9, "MyInf.png");
+            this.MainImageList.Images.SetKeyName(10, "MyErr.png");
+            // 
+            // MainContextMenu
+            // 
+            this.MainContextMenu.Name = "contextMenuStrip1";
+            this.MainContextMenu.Size = new System.Drawing.Size(61, 4);
+            // 
+            // TimerTrayClick
+            // 
+            this.TimerTrayClick.Interval = 250;
+            this.TimerTrayClick.Tick += new System.EventHandler(this.TimerTrayClick_Tick);
+            // 
+            // TimerTrayShow
+            // 
+            this.TimerTrayShow.Interval = 600;
+            this.TimerTrayShow.Tag = "TrayClosed48.png";
+            this.TimerTrayShow.Tick += new System.EventHandler(this.TimerTrayShow_Tick);
+            // 
+            // TimerTrayMail
+            // 
+            this.TimerTrayMail.Interval = 300000;
+            this.TimerTrayMail.Tick += new System.EventHandler(this.TimerTrayMail_Tick);
+            // 
+            // PanelSettingsAccount
+            // 
+            this.PanelSettingsAccount.BackColor = System.Drawing.Color.Transparent;
+            this.PanelSettingsAccount.Controls.Add(this.PropertyGridAccount);
+            this.PanelSettingsAccount.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.PanelSettingsAccount.Location = new System.Drawing.Point(0, 39);
+            this.PanelSettingsAccount.Margin = new System.Windows.Forms.Padding(3, 3, 13, 3);
+            this.PanelSettingsAccount.Name = "PanelSettingsAccount";
+            this.PanelSettingsAccount.Padding = new System.Windows.Forms.Padding(4, 9, 4, 11);
+            this.PanelSettingsAccount.Size = new System.Drawing.Size(525, 343);
+            this.PanelSettingsAccount.TabIndex = 9;
+            // 
+            // PropertyGridAccount
+            // 
+            this.PropertyGridAccount.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.PropertyGridAccount.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(32)))));
+            this.PropertyGridAccount.CanShowVisualStyleGlyphs = false;
+            this.PropertyGridAccount.CategoryForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(32)))));
+            this.PropertyGridAccount.CategorySplitterColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(80)))));
+            this.PropertyGridAccount.CommandsBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(32)))));
+            this.PropertyGridAccount.CommandsBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(70)))));
+            this.PropertyGridAccount.CommandsVisibleIfAvailable = false;
+            this.PropertyGridAccount.DisabledItemForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(127)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.PropertyGridAccount.HelpBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(32)))));
+            this.PropertyGridAccount.HelpBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(70)))));
+            this.PropertyGridAccount.HelpForeColor = System.Drawing.Color.Gainsboro;
+            this.PropertyGridAccount.LineColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(39)))));
+            this.PropertyGridAccount.Location = new System.Drawing.Point(2, 4);
+            this.PropertyGridAccount.Name = "PropertyGridAccount";
+            this.PropertyGridAccount.PropertySort = System.Windows.Forms.PropertySort.NoSort;
+            this.PropertyGridAccount.SelectedItemWithFocusBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(210)))));
+            this.PropertyGridAccount.SelectedObject = this.CaptionFormMain;
+            this.PropertyGridAccount.Size = new System.Drawing.Size(517, 332);
+            this.PropertyGridAccount.TabIndex = 0;
+            this.PropertyGridAccount.ToolbarVisible = false;
+            this.PropertyGridAccount.ViewBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(32)))));
+            this.PropertyGridAccount.ViewBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(70)))));
+            this.PropertyGridAccount.ViewForeColor = System.Drawing.Color.Gainsboro;
             // 
             // RightLinkInfo
             // 
@@ -674,7 +676,7 @@ namespace MailNotifier
             this.RightLinkAccount.LinkColor = System.Drawing.Color.LightBlue;
             this.RightLinkAccount.Location = new System.Drawing.Point(230, 0);
             this.RightLinkAccount.Name = "RightLinkAccount";
-            this.RightLinkAccount.Size = new System.Drawing.Size(302, 28);
+            this.RightLinkAccount.Size = new System.Drawing.Size(292, 28);
             this.RightLinkAccount.TabIndex = 4;
             this.RightLinkAccount.TabStop = true;
             this.RightLinkAccount.Text = "Настройки аккаунта";
@@ -684,42 +686,73 @@ namespace MailNotifier
             this.RightLinkAccount.MouseLeave += new System.EventHandler(this.RightLink_MouseLeave);
             this.RightLinkAccount.MouseHover += new System.EventHandler(this.RightLink_MouseHover);
             // 
-            // MainImageList
+            // CaptionFormMain
             // 
-            this.MainImageList.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("MainImageList.ImageStream")));
-            this.MainImageList.TransparentColor = System.Drawing.Color.Transparent;
-            this.MainImageList.Images.SetKeyName(0, "MailNotifier48.png");
-            this.MainImageList.Images.SetKeyName(1, "Account48.png");
-            this.MainImageList.Images.SetKeyName(2, "MunuExit48.png");
-            this.MainImageList.Images.SetKeyName(3, "MenuFromTray48.png");
-            this.MainImageList.Images.SetKeyName(4, "MenuToTray48.png");
-            this.MainImageList.Images.SetKeyName(5, "TrayUpdate48.png");
-            this.MainImageList.Images.SetKeyName(6, "TrayClosed48.png");
-            this.MainImageList.Images.SetKeyName(7, "TrayOpen48.png");
-            this.MainImageList.Images.SetKeyName(8, "MyQst.png");
-            this.MainImageList.Images.SetKeyName(9, "MyInf.png");
-            this.MainImageList.Images.SetKeyName(10, "MyErr.png");
+            this.CaptionFormMain.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.CaptionFormMain.Enabled = false;
+            this.CaptionFormMain.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.CaptionFormMain.ForeColor = System.Drawing.Color.Gainsboro;
+            this.CaptionFormMain.Location = new System.Drawing.Point(0, 0);
+            this.CaptionFormMain.Name = "CaptionFormMain";
+            this.CaptionFormMain.Size = new System.Drawing.Size(818, 36);
+            this.CaptionFormMain.TabIndex = 3;
+            this.CaptionFormMain.Text = "Mail Notifier";
+            this.CaptionFormMain.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // MainContextMenu
+            // PropertyGridProgramm
             // 
-            this.MainContextMenu.Name = "contextMenuStrip1";
-            this.MainContextMenu.Size = new System.Drawing.Size(61, 4);
+            this.PropertyGridProgramm.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.PropertyGridProgramm.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(32)))));
+            this.PropertyGridProgramm.CanShowVisualStyleGlyphs = false;
+            this.PropertyGridProgramm.CategoryForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(32)))));
+            this.PropertyGridProgramm.CategorySplitterColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(80)))));
+            this.PropertyGridProgramm.CommandsBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(32)))));
+            this.PropertyGridProgramm.CommandsBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(70)))));
+            this.PropertyGridProgramm.CommandsVisibleIfAvailable = false;
+            this.PropertyGridProgramm.DisabledItemForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(127)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.PropertyGridProgramm.HelpBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(32)))));
+            this.PropertyGridProgramm.HelpBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(70)))));
+            this.PropertyGridProgramm.HelpForeColor = System.Drawing.Color.Gainsboro;
+            this.PropertyGridProgramm.LineColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(39)))));
+            this.PropertyGridProgramm.Location = new System.Drawing.Point(2, 4);
+            this.PropertyGridProgramm.Name = "PropertyGridProgramm";
+            this.PropertyGridProgramm.PropertySort = System.Windows.Forms.PropertySort.NoSort;
+            this.PropertyGridProgramm.SelectedItemWithFocusBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(210)))));
+            this.PropertyGridProgramm.SelectedObject = this.CaptionFormMain;
+            this.PropertyGridProgramm.Size = new System.Drawing.Size(517, 332);
+            this.PropertyGridProgramm.TabIndex = 1;
+            this.PropertyGridProgramm.ToolbarVisible = false;
+            this.PropertyGridProgramm.ViewBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(32)))));
+            this.PropertyGridProgramm.ViewBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(70)))));
+            this.PropertyGridProgramm.ViewForeColor = System.Drawing.Color.Gainsboro;
             // 
-            // TimerTrayClick
+            // ButtonErrorClear
             // 
-            this.TimerTrayClick.Interval = 250;
-            this.TimerTrayClick.Tick += new System.EventHandler(this.TimerTrayClick_Tick);
+            this.ButtonErrorClear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.ButtonErrorClear.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(34)))));
+            this.ButtonErrorClear.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.ButtonErrorClear.Location = new System.Drawing.Point(487, 135);
+            this.ButtonErrorClear.Name = "ButtonErrorClear";
+            this.ButtonErrorClear.Size = new System.Drawing.Size(24, 24);
+            this.ButtonErrorClear.TabIndex = 7;
+            this.ButtonErrorClear.Text = "x";
+            this.ButtonErrorClear.UseVisualStyleBackColor = false;
+            this.ButtonErrorClear.Visible = false;
             // 
-            // TimerTrayShow
+            // ButtonErrorCopy
             // 
-            this.TimerTrayShow.Interval = 600;
-            this.TimerTrayShow.Tag = "TrayClosed48.png";
-            this.TimerTrayShow.Tick += new System.EventHandler(this.TimerTrayShow_Tick);
-            // 
-            // TimerTrayMail
-            // 
-            this.TimerTrayMail.Interval = 300000;
-            this.TimerTrayMail.Tick += new System.EventHandler(this.TimerTrayMail_Tick);
+            this.ButtonErrorCopy.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.ButtonErrorCopy.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(34)))));
+            this.ButtonErrorCopy.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.ButtonErrorCopy.Location = new System.Drawing.Point(457, 135);
+            this.ButtonErrorCopy.Name = "ButtonErrorCopy";
+            this.ButtonErrorCopy.Size = new System.Drawing.Size(24, 24);
+            this.ButtonErrorCopy.TabIndex = 8;
+            this.ButtonErrorCopy.Text = "c";
+            this.ButtonErrorCopy.UseVisualStyleBackColor = false;
+            this.ButtonErrorCopy.Visible = false;
             // 
             // FormMain
             // 
@@ -751,19 +784,14 @@ namespace MailNotifier
             this.MainSplitContainer.ResumeLayout(false);
             this.ToolsAdminPanel.ResumeLayout(false);
             this.ToolsAdminPanel.PerformLayout();
-            this.EditComboBoxPanel.ResumeLayout(false);
             this.PanelSetInfoAccount.ResumeLayout(false);
             this.PanelSetInfoAccount.PerformLayout();
-            this.PanelSettingsAccount.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.SplitContainerParamAccount)).EndInit();
-            this.SplitContainerParamAccount.ResumeLayout(false);
             this.PanelSettingsProgramm.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.SplitContainerParamProgramm)).EndInit();
-            this.SplitContainerParamProgramm.ResumeLayout(false);
             this.PanelAutorization.ResumeLayout(false);
             this.PanelAutorization.PerformLayout();
             this.ToolsTabPanel.ResumeLayout(false);
             this.ToolsTabPanel.PerformLayout();
+            this.PanelSettingsAccount.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -800,7 +828,6 @@ namespace MailNotifier
         private Panel PanelSettingSeparator;
         private Panel PanelSetInfoAccount;
         private Panel PanelSettingsProgramm;
-        private Panel PanelSettingsAccount;
         private Label LoginInfoLabel;
         private LinkLabel UnloginLink;
         private TextBox LoginPassword;
@@ -812,10 +839,11 @@ namespace MailNotifier
         private Panel PanelAutorization;
         private Label LoginLabel;
         private Label LoginErrorLabel;
-        private SplitContainer SplitContainerParamProgramm;
-        private Panel EditComboBoxPanel;
-        private FlatComboBox flatComboBox1;
-        private SplitContainer SplitContainerParamAccount;
+        private Panel PanelSettingsAccount;
+        private PropertyGrid PropertyGridAccount;
+        private PropertyGrid PropertyGridProgramm;
+        private Button ButtonErrorClear;
+        private Button ButtonErrorCopy;
     }
 }
 
