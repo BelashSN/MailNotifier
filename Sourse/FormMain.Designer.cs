@@ -44,6 +44,7 @@ namespace MailNotifier
             this.ButtonFormHeaderAdmin = new System.Windows.Forms.Button();
             this.ButtonFormHeaderMenu = new System.Windows.Forms.Button();
             this.ButtonFormHeaderTray = new System.Windows.Forms.Button();
+            this.CaptionFormMain = new MailNotifier.ColorLabel(this.components);
             this.PictureFormMainHeader = new System.Windows.Forms.PictureBox();
             this.StatusFormMain = new System.Windows.Forms.StatusStrip();
             this.StatusFormMainMode = new System.Windows.Forms.ToolStripStatusLabel();
@@ -57,11 +58,16 @@ namespace MailNotifier
             this.ToolsAnonLabel = new System.Windows.Forms.Label();
             this.MainLeftPanel = new System.Windows.Forms.Panel();
             this.PanelSetInfoAccount = new System.Windows.Forms.Panel();
+            this.ButtonErrorCopy = new System.Windows.Forms.Button();
+            this.ButtonErrorClear = new System.Windows.Forms.Button();
             this.InfoError = new System.Windows.Forms.TextBox();
             this.InfoLastCheck = new System.Windows.Forms.Label();
             this.InfoMessages = new System.Windows.Forms.Label();
             this.InfoAccount = new System.Windows.Forms.Label();
             this.PanelSettingsProgramm = new System.Windows.Forms.Panel();
+            this.PropertyGridProgramm = new System.Windows.Forms.PropertyGrid();
+            this.PanelSettingsAccount = new System.Windows.Forms.Panel();
+            this.PropertyGridAccount = new System.Windows.Forms.PropertyGrid();
             this.PanelAutorization = new System.Windows.Forms.Panel();
             this.LoginPassword = new System.Windows.Forms.TextBox();
             this.UnloginLink = new System.Windows.Forms.LinkLabel();
@@ -70,20 +76,14 @@ namespace MailNotifier
             this.LoginLabel = new System.Windows.Forms.Label();
             this.PanelSettingSeparator = new System.Windows.Forms.Panel();
             this.ToolsTabPanel = new System.Windows.Forms.TableLayoutPanel();
+            this.RightLinkInfo = new MailNotifier.UnderlinedLabel(this.components);
+            this.RightLinkProgramm = new MailNotifier.UnderlinedLabel(this.components);
+            this.RightLinkAccount = new MailNotifier.UnderlinedLabel(this.components);
             this.MainImageList = new System.Windows.Forms.ImageList(this.components);
             this.MainContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.TimerTrayClick = new System.Windows.Forms.Timer(this.components);
             this.TimerTrayShow = new System.Windows.Forms.Timer(this.components);
             this.TimerTrayMail = new System.Windows.Forms.Timer(this.components);
-            this.PanelSettingsAccount = new System.Windows.Forms.Panel();
-            this.PropertyGridAccount = new System.Windows.Forms.PropertyGrid();
-            this.RightLinkInfo = new MailNotifier.UnderlinedLabel(this.components);
-            this.RightLinkProgramm = new MailNotifier.UnderlinedLabel(this.components);
-            this.RightLinkAccount = new MailNotifier.UnderlinedLabel(this.components);
-            this.CaptionFormMain = new MailNotifier.ColorLabel(this.components);
-            this.PropertyGridProgramm = new System.Windows.Forms.PropertyGrid();
-            this.ButtonErrorClear = new System.Windows.Forms.Button();
-            this.ButtonErrorCopy = new System.Windows.Forms.Button();
             this.PanelFormMainHeader.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.PictureFormMainHeader)).BeginInit();
             this.StatusFormMain.SuspendLayout();
@@ -95,9 +95,9 @@ namespace MailNotifier
             this.ToolsAdminPanel.SuspendLayout();
             this.PanelSetInfoAccount.SuspendLayout();
             this.PanelSettingsProgramm.SuspendLayout();
+            this.PanelSettingsAccount.SuspendLayout();
             this.PanelAutorization.SuspendLayout();
             this.ToolsTabPanel.SuspendLayout();
-            this.PanelSettingsAccount.SuspendLayout();
             this.SuspendLayout();
             // 
             // NotifyIconMain
@@ -182,6 +182,19 @@ namespace MailNotifier
             this.ButtonFormHeaderTray.Click += new System.EventHandler(this.ButtonFormHeaderToTray_Click);
             this.ButtonFormHeaderTray.MouseLeave += new System.EventHandler(this.ButtonFormHeaderTray_MouseLeave);
             this.ButtonFormHeaderTray.MouseHover += new System.EventHandler(this.ButtonFormHeaderTray_MouseHover);
+            // 
+            // CaptionFormMain
+            // 
+            this.CaptionFormMain.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.CaptionFormMain.Enabled = false;
+            this.CaptionFormMain.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.CaptionFormMain.ForeColor = System.Drawing.Color.Gainsboro;
+            this.CaptionFormMain.Location = new System.Drawing.Point(0, 0);
+            this.CaptionFormMain.Name = "CaptionFormMain";
+            this.CaptionFormMain.Size = new System.Drawing.Size(818, 36);
+            this.CaptionFormMain.TabIndex = 3;
+            this.CaptionFormMain.Text = "Mail Notifier";
+            this.CaptionFormMain.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // PictureFormMainHeader
             // 
@@ -382,6 +395,32 @@ namespace MailNotifier
             this.PanelSetInfoAccount.Size = new System.Drawing.Size(525, 343);
             this.PanelSetInfoAccount.TabIndex = 7;
             // 
+            // ButtonErrorCopy
+            // 
+            this.ButtonErrorCopy.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.ButtonErrorCopy.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(34)))));
+            this.ButtonErrorCopy.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.ButtonErrorCopy.Location = new System.Drawing.Point(457, 135);
+            this.ButtonErrorCopy.Name = "ButtonErrorCopy";
+            this.ButtonErrorCopy.Size = new System.Drawing.Size(24, 24);
+            this.ButtonErrorCopy.TabIndex = 8;
+            this.ButtonErrorCopy.Text = "c";
+            this.ButtonErrorCopy.UseVisualStyleBackColor = false;
+            this.ButtonErrorCopy.Visible = false;
+            // 
+            // ButtonErrorClear
+            // 
+            this.ButtonErrorClear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.ButtonErrorClear.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(34)))));
+            this.ButtonErrorClear.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.ButtonErrorClear.Location = new System.Drawing.Point(487, 135);
+            this.ButtonErrorClear.Name = "ButtonErrorClear";
+            this.ButtonErrorClear.Size = new System.Drawing.Size(24, 24);
+            this.ButtonErrorClear.TabIndex = 7;
+            this.ButtonErrorClear.Text = "x";
+            this.ButtonErrorClear.UseVisualStyleBackColor = false;
+            this.ButtonErrorClear.Visible = false;
+            // 
             // InfoError
             // 
             this.InfoError.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -436,6 +475,76 @@ namespace MailNotifier
             this.PanelSettingsProgramm.Padding = new System.Windows.Forms.Padding(4, 9, 4, 11);
             this.PanelSettingsProgramm.Size = new System.Drawing.Size(525, 343);
             this.PanelSettingsProgramm.TabIndex = 8;
+            // 
+            // PropertyGridProgramm
+            // 
+            this.PropertyGridProgramm.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.PropertyGridProgramm.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(32)))));
+            this.PropertyGridProgramm.CanShowVisualStyleGlyphs = false;
+            this.PropertyGridProgramm.CategoryForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(32)))));
+            this.PropertyGridProgramm.CategorySplitterColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(80)))));
+            this.PropertyGridProgramm.CommandsBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(32)))));
+            this.PropertyGridProgramm.CommandsBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(70)))));
+            this.PropertyGridProgramm.CommandsVisibleIfAvailable = false;
+            this.PropertyGridProgramm.DisabledItemForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(127)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.PropertyGridProgramm.HelpBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(32)))));
+            this.PropertyGridProgramm.HelpBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(70)))));
+            this.PropertyGridProgramm.HelpForeColor = System.Drawing.Color.Gainsboro;
+            this.PropertyGridProgramm.LineColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(39)))));
+            this.PropertyGridProgramm.Location = new System.Drawing.Point(2, 4);
+            this.PropertyGridProgramm.Name = "PropertyGridProgramm";
+            this.PropertyGridProgramm.PropertySort = System.Windows.Forms.PropertySort.NoSort;
+            this.PropertyGridProgramm.SelectedItemWithFocusBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(30)))), ((int)(((byte)(100)))));
+            this.PropertyGridProgramm.SelectedItemWithFocusForeColor = System.Drawing.Color.Gainsboro;
+            this.PropertyGridProgramm.Size = new System.Drawing.Size(517, 332);
+            this.PropertyGridProgramm.TabIndex = 1;
+            this.PropertyGridProgramm.ToolbarVisible = false;
+            this.PropertyGridProgramm.ViewBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(32)))));
+            this.PropertyGridProgramm.ViewBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(70)))));
+            this.PropertyGridProgramm.ViewForeColor = System.Drawing.Color.Gainsboro;
+            // 
+            // PanelSettingsAccount
+            // 
+            this.PanelSettingsAccount.BackColor = System.Drawing.Color.Transparent;
+            this.PanelSettingsAccount.Controls.Add(this.PropertyGridAccount);
+            this.PanelSettingsAccount.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.PanelSettingsAccount.Location = new System.Drawing.Point(0, 39);
+            this.PanelSettingsAccount.Margin = new System.Windows.Forms.Padding(3, 3, 13, 3);
+            this.PanelSettingsAccount.Name = "PanelSettingsAccount";
+            this.PanelSettingsAccount.Padding = new System.Windows.Forms.Padding(4, 9, 4, 11);
+            this.PanelSettingsAccount.Size = new System.Drawing.Size(525, 343);
+            this.PanelSettingsAccount.TabIndex = 9;
+            // 
+            // PropertyGridAccount
+            // 
+            this.PropertyGridAccount.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.PropertyGridAccount.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(32)))));
+            this.PropertyGridAccount.CanShowVisualStyleGlyphs = false;
+            this.PropertyGridAccount.CategoryForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(32)))));
+            this.PropertyGridAccount.CategorySplitterColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(80)))));
+            this.PropertyGridAccount.CommandsBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(32)))));
+            this.PropertyGridAccount.CommandsBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(70)))));
+            this.PropertyGridAccount.CommandsVisibleIfAvailable = false;
+            this.PropertyGridAccount.DisabledItemForeColor = System.Drawing.Color.Teal;
+            this.PropertyGridAccount.HelpBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(32)))));
+            this.PropertyGridAccount.HelpBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(70)))));
+            this.PropertyGridAccount.HelpForeColor = System.Drawing.Color.Gainsboro;
+            this.PropertyGridAccount.LineColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(39)))));
+            this.PropertyGridAccount.Location = new System.Drawing.Point(2, 4);
+            this.PropertyGridAccount.Name = "PropertyGridAccount";
+            this.PropertyGridAccount.PropertySort = System.Windows.Forms.PropertySort.NoSort;
+            this.PropertyGridAccount.SelectedItemWithFocusBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(30)))), ((int)(((byte)(100)))));
+            this.PropertyGridAccount.SelectedItemWithFocusForeColor = System.Drawing.Color.Gainsboro;
+            this.PropertyGridAccount.Size = new System.Drawing.Size(517, 332);
+            this.PropertyGridAccount.TabIndex = 0;
+            this.PropertyGridAccount.ToolbarVisible = false;
+            this.PropertyGridAccount.ViewBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(32)))));
+            this.PropertyGridAccount.ViewBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(70)))));
+            this.PropertyGridAccount.ViewForeColor = System.Drawing.Color.Gainsboro;
             // 
             // PanelAutorization
             // 
@@ -551,84 +660,6 @@ namespace MailNotifier
             this.ToolsTabPanel.Size = new System.Drawing.Size(525, 28);
             this.ToolsTabPanel.TabIndex = 5;
             // 
-            // MainImageList
-            // 
-            this.MainImageList.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("MainImageList.ImageStream")));
-            this.MainImageList.TransparentColor = System.Drawing.Color.Transparent;
-            this.MainImageList.Images.SetKeyName(0, "MailNotifier48.png");
-            this.MainImageList.Images.SetKeyName(1, "Account48.png");
-            this.MainImageList.Images.SetKeyName(2, "MunuExit48.png");
-            this.MainImageList.Images.SetKeyName(3, "MenuFromTray48.png");
-            this.MainImageList.Images.SetKeyName(4, "MenuToTray48.png");
-            this.MainImageList.Images.SetKeyName(5, "TrayUpdate48.png");
-            this.MainImageList.Images.SetKeyName(6, "TrayClosed48.png");
-            this.MainImageList.Images.SetKeyName(7, "TrayOpen48.png");
-            this.MainImageList.Images.SetKeyName(8, "MyQst.png");
-            this.MainImageList.Images.SetKeyName(9, "MyInf.png");
-            this.MainImageList.Images.SetKeyName(10, "MyErr.png");
-            // 
-            // MainContextMenu
-            // 
-            this.MainContextMenu.Name = "contextMenuStrip1";
-            this.MainContextMenu.Size = new System.Drawing.Size(61, 4);
-            // 
-            // TimerTrayClick
-            // 
-            this.TimerTrayClick.Interval = 250;
-            this.TimerTrayClick.Tick += new System.EventHandler(this.TimerTrayClick_Tick);
-            // 
-            // TimerTrayShow
-            // 
-            this.TimerTrayShow.Interval = 600;
-            this.TimerTrayShow.Tag = "TrayClosed48.png";
-            this.TimerTrayShow.Tick += new System.EventHandler(this.TimerTrayShow_Tick);
-            // 
-            // TimerTrayMail
-            // 
-            this.TimerTrayMail.Interval = 300000;
-            this.TimerTrayMail.Tick += new System.EventHandler(this.TimerTrayMail_Tick);
-            // 
-            // PanelSettingsAccount
-            // 
-            this.PanelSettingsAccount.BackColor = System.Drawing.Color.Transparent;
-            this.PanelSettingsAccount.Controls.Add(this.PropertyGridAccount);
-            this.PanelSettingsAccount.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.PanelSettingsAccount.Location = new System.Drawing.Point(0, 39);
-            this.PanelSettingsAccount.Margin = new System.Windows.Forms.Padding(3, 3, 13, 3);
-            this.PanelSettingsAccount.Name = "PanelSettingsAccount";
-            this.PanelSettingsAccount.Padding = new System.Windows.Forms.Padding(4, 9, 4, 11);
-            this.PanelSettingsAccount.Size = new System.Drawing.Size(525, 343);
-            this.PanelSettingsAccount.TabIndex = 9;
-            // 
-            // PropertyGridAccount
-            // 
-            this.PropertyGridAccount.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.PropertyGridAccount.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(32)))));
-            this.PropertyGridAccount.CanShowVisualStyleGlyphs = false;
-            this.PropertyGridAccount.CategoryForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(32)))));
-            this.PropertyGridAccount.CategorySplitterColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(80)))));
-            this.PropertyGridAccount.CommandsBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(32)))));
-            this.PropertyGridAccount.CommandsBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(70)))));
-            this.PropertyGridAccount.CommandsVisibleIfAvailable = false;
-            this.PropertyGridAccount.DisabledItemForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(127)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.PropertyGridAccount.HelpBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(32)))));
-            this.PropertyGridAccount.HelpBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(70)))));
-            this.PropertyGridAccount.HelpForeColor = System.Drawing.Color.Gainsboro;
-            this.PropertyGridAccount.LineColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(39)))));
-            this.PropertyGridAccount.Location = new System.Drawing.Point(2, 4);
-            this.PropertyGridAccount.Name = "PropertyGridAccount";
-            this.PropertyGridAccount.PropertySort = System.Windows.Forms.PropertySort.NoSort;
-            this.PropertyGridAccount.SelectedItemWithFocusBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(210)))));
-            this.PropertyGridAccount.SelectedObject = this.CaptionFormMain;
-            this.PropertyGridAccount.Size = new System.Drawing.Size(517, 332);
-            this.PropertyGridAccount.TabIndex = 0;
-            this.PropertyGridAccount.ToolbarVisible = false;
-            this.PropertyGridAccount.ViewBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(32)))));
-            this.PropertyGridAccount.ViewBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(70)))));
-            this.PropertyGridAccount.ViewForeColor = System.Drawing.Color.Gainsboro;
-            // 
             // RightLinkInfo
             // 
             this.RightLinkInfo.ActiveLinkColor = System.Drawing.Color.WhiteSmoke;
@@ -686,73 +717,42 @@ namespace MailNotifier
             this.RightLinkAccount.MouseLeave += new System.EventHandler(this.RightLink_MouseLeave);
             this.RightLinkAccount.MouseHover += new System.EventHandler(this.RightLink_MouseHover);
             // 
-            // CaptionFormMain
+            // MainImageList
             // 
-            this.CaptionFormMain.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.CaptionFormMain.Enabled = false;
-            this.CaptionFormMain.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.CaptionFormMain.ForeColor = System.Drawing.Color.Gainsboro;
-            this.CaptionFormMain.Location = new System.Drawing.Point(0, 0);
-            this.CaptionFormMain.Name = "CaptionFormMain";
-            this.CaptionFormMain.Size = new System.Drawing.Size(818, 36);
-            this.CaptionFormMain.TabIndex = 3;
-            this.CaptionFormMain.Text = "Mail Notifier";
-            this.CaptionFormMain.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.MainImageList.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("MainImageList.ImageStream")));
+            this.MainImageList.TransparentColor = System.Drawing.Color.Transparent;
+            this.MainImageList.Images.SetKeyName(0, "MailNotifier48.png");
+            this.MainImageList.Images.SetKeyName(1, "Account48.png");
+            this.MainImageList.Images.SetKeyName(2, "MunuExit48.png");
+            this.MainImageList.Images.SetKeyName(3, "MenuFromTray48.png");
+            this.MainImageList.Images.SetKeyName(4, "MenuToTray48.png");
+            this.MainImageList.Images.SetKeyName(5, "TrayUpdate48.png");
+            this.MainImageList.Images.SetKeyName(6, "TrayClosed48.png");
+            this.MainImageList.Images.SetKeyName(7, "TrayOpen48.png");
+            this.MainImageList.Images.SetKeyName(8, "MyQst.png");
+            this.MainImageList.Images.SetKeyName(9, "MyInf.png");
+            this.MainImageList.Images.SetKeyName(10, "MyErr.png");
             // 
-            // PropertyGridProgramm
+            // MainContextMenu
             // 
-            this.PropertyGridProgramm.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.PropertyGridProgramm.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(32)))));
-            this.PropertyGridProgramm.CanShowVisualStyleGlyphs = false;
-            this.PropertyGridProgramm.CategoryForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(32)))));
-            this.PropertyGridProgramm.CategorySplitterColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(80)))));
-            this.PropertyGridProgramm.CommandsBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(32)))));
-            this.PropertyGridProgramm.CommandsBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(70)))));
-            this.PropertyGridProgramm.CommandsVisibleIfAvailable = false;
-            this.PropertyGridProgramm.DisabledItemForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(127)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.PropertyGridProgramm.HelpBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(32)))));
-            this.PropertyGridProgramm.HelpBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(70)))));
-            this.PropertyGridProgramm.HelpForeColor = System.Drawing.Color.Gainsboro;
-            this.PropertyGridProgramm.LineColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(39)))));
-            this.PropertyGridProgramm.Location = new System.Drawing.Point(2, 4);
-            this.PropertyGridProgramm.Name = "PropertyGridProgramm";
-            this.PropertyGridProgramm.PropertySort = System.Windows.Forms.PropertySort.NoSort;
-            this.PropertyGridProgramm.SelectedItemWithFocusBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(210)))));
-            this.PropertyGridProgramm.SelectedObject = this.CaptionFormMain;
-            this.PropertyGridProgramm.Size = new System.Drawing.Size(517, 332);
-            this.PropertyGridProgramm.TabIndex = 1;
-            this.PropertyGridProgramm.ToolbarVisible = false;
-            this.PropertyGridProgramm.ViewBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(32)))));
-            this.PropertyGridProgramm.ViewBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(70)))));
-            this.PropertyGridProgramm.ViewForeColor = System.Drawing.Color.Gainsboro;
+            this.MainContextMenu.Name = "contextMenuStrip1";
+            this.MainContextMenu.Size = new System.Drawing.Size(61, 4);
             // 
-            // ButtonErrorClear
+            // TimerTrayClick
             // 
-            this.ButtonErrorClear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.ButtonErrorClear.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(34)))));
-            this.ButtonErrorClear.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.ButtonErrorClear.Location = new System.Drawing.Point(487, 135);
-            this.ButtonErrorClear.Name = "ButtonErrorClear";
-            this.ButtonErrorClear.Size = new System.Drawing.Size(24, 24);
-            this.ButtonErrorClear.TabIndex = 7;
-            this.ButtonErrorClear.Text = "x";
-            this.ButtonErrorClear.UseVisualStyleBackColor = false;
-            this.ButtonErrorClear.Visible = false;
+            this.TimerTrayClick.Interval = 250;
+            this.TimerTrayClick.Tick += new System.EventHandler(this.TimerTrayClick_Tick);
             // 
-            // ButtonErrorCopy
+            // TimerTrayShow
             // 
-            this.ButtonErrorCopy.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.ButtonErrorCopy.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(34)))));
-            this.ButtonErrorCopy.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.ButtonErrorCopy.Location = new System.Drawing.Point(457, 135);
-            this.ButtonErrorCopy.Name = "ButtonErrorCopy";
-            this.ButtonErrorCopy.Size = new System.Drawing.Size(24, 24);
-            this.ButtonErrorCopy.TabIndex = 8;
-            this.ButtonErrorCopy.Text = "c";
-            this.ButtonErrorCopy.UseVisualStyleBackColor = false;
-            this.ButtonErrorCopy.Visible = false;
+            this.TimerTrayShow.Interval = 600;
+            this.TimerTrayShow.Tag = "TrayClosed48.png";
+            this.TimerTrayShow.Tick += new System.EventHandler(this.TimerTrayShow_Tick);
+            // 
+            // TimerTrayMail
+            // 
+            this.TimerTrayMail.Interval = 300000;
+            this.TimerTrayMail.Tick += new System.EventHandler(this.TimerTrayMail_Tick);
             // 
             // FormMain
             // 
@@ -787,11 +787,11 @@ namespace MailNotifier
             this.PanelSetInfoAccount.ResumeLayout(false);
             this.PanelSetInfoAccount.PerformLayout();
             this.PanelSettingsProgramm.ResumeLayout(false);
+            this.PanelSettingsAccount.ResumeLayout(false);
             this.PanelAutorization.ResumeLayout(false);
             this.PanelAutorization.PerformLayout();
             this.ToolsTabPanel.ResumeLayout(false);
             this.ToolsTabPanel.PerformLayout();
-            this.PanelSettingsAccount.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }

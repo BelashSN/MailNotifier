@@ -1,17 +1,17 @@
 ﻿// ------------ Не удалять, используется в Release !!!
+using System.Threading.Tasks; //  Не удалять!!!
+// ------------
 using S22.Imap;
 // ------------
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Drawing;
-using System.Drawing.Drawing2D;
 using System.Linq;
+using System.Drawing;
 using System.Reflection;
-using System.Runtime.InteropServices;
-using System.Security.Cryptography;
-using System.Threading.Tasks; //  Не удалять!!!
+using System.Diagnostics;
 using System.Windows.Forms;
+using System.Drawing.Drawing2D;
+using System.Collections.Generic;
+using System.Runtime.InteropServices;
 
 
 // ==============================================================
@@ -260,7 +260,17 @@ namespace MailNotifier
                 PanelSettingsAccount.Visible = false;
                 PanelSettingsProgramm.Visible = false;
                 // ------------
-                PanelAutorization.Visible = true; }
+                PanelAutorization.Visible = true;
+                // ------------
+                if (Parameters.ParamWork.Settings.SavedSettings.Password == "")
+                {
+                    bool IsAdmin = !Parameters.ParamWork.Settings.IsAdmin;
+                    Parameters.ParamWork.Settings.IsAdmin = IsAdmin;
+                    // ------------
+                    if (IsAdmin) ButtonFormHeaderAdmin_Click(sender, e);
+                    else RebuildElementsByAutorization();
+                }
+            }
         }
         // ------------
         #endregion
@@ -286,12 +296,16 @@ namespace MailNotifier
         {
             if (Parameters.ParamWork.Settings.CurrentAccount == null) return;
             PropertyGridAccount.SelectedObject = Parameters.ParamWork.Settings.CurrentAccount.Account;
+            PropertyGridAccount.ViewForeColor = Color.Gainsboro;
+            PropertyGridAccount.ForeColor = Color.Gainsboro;
         }
 
         // ==================================== /////!!!!!
         private void UpdateParametersPanel()
         {
             PropertyGridProgramm.SelectedObject = Parameters.ParamWork.Settings.SavedSettings;
+            PropertyGridProgramm.ViewForeColor = Color.Gainsboro;
+            PropertyGridProgramm.ForeColor = Color.Gainsboro;
         }
         // ------------
         #endregion
