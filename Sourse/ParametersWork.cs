@@ -54,6 +54,8 @@ namespace MailNotifier
     // ------------
     public class ParametersWork
     {
+        // Критическая ошибка, не позволяющая работу программы
+        public bool IsCriticalError { get; set; } = false;
         // Рабочие настройки программы
         public WorkSettings Settings { get; set; } = new WorkSettings();
         // Рабочий список аккаунтов

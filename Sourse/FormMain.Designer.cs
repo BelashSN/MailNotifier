@@ -59,6 +59,7 @@ namespace MailNotifier
             this.MainLeftPanel = new System.Windows.Forms.Panel();
             this.PanelSetInfoAccount = new System.Windows.Forms.Panel();
             this.ButtonErrorCopy = new System.Windows.Forms.Button();
+            this.ErrorImageList = new System.Windows.Forms.ImageList(this.components);
             this.ButtonErrorClear = new System.Windows.Forms.Button();
             this.InfoError = new System.Windows.Forms.TextBox();
             this.InfoLastCheck = new System.Windows.Forms.Label();
@@ -385,10 +386,10 @@ namespace MailNotifier
             this.PanelSetInfoAccount.BackColor = System.Drawing.Color.Transparent;
             this.PanelSetInfoAccount.Controls.Add(this.ButtonErrorCopy);
             this.PanelSetInfoAccount.Controls.Add(this.ButtonErrorClear);
-            this.PanelSetInfoAccount.Controls.Add(this.InfoError);
-            this.PanelSetInfoAccount.Controls.Add(this.InfoLastCheck);
-            this.PanelSetInfoAccount.Controls.Add(this.InfoMessages);
             this.PanelSetInfoAccount.Controls.Add(this.InfoAccount);
+            this.PanelSetInfoAccount.Controls.Add(this.InfoMessages);
+            this.PanelSetInfoAccount.Controls.Add(this.InfoLastCheck);
+            this.PanelSetInfoAccount.Controls.Add(this.InfoError);
             this.PanelSetInfoAccount.Location = new System.Drawing.Point(0, 39);
             this.PanelSetInfoAccount.Margin = new System.Windows.Forms.Padding(3, 3, 13, 3);
             this.PanelSetInfoAccount.Name = "PanelSetInfoAccount";
@@ -398,35 +399,46 @@ namespace MailNotifier
             // ButtonErrorCopy
             // 
             this.ButtonErrorCopy.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.ButtonErrorCopy.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(34)))));
-            this.ButtonErrorCopy.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.ButtonErrorCopy.Location = new System.Drawing.Point(457, 135);
+            this.ButtonErrorCopy.BackColor = System.Drawing.Color.Transparent;
+            this.ButtonErrorCopy.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.ButtonErrorCopy.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.ButtonErrorCopy.ImageIndex = 1;
+            this.ButtonErrorCopy.ImageList = this.ErrorImageList;
+            this.ButtonErrorCopy.Location = new System.Drawing.Point(465, 135);
             this.ButtonErrorCopy.Name = "ButtonErrorCopy";
-            this.ButtonErrorCopy.Size = new System.Drawing.Size(24, 24);
+            this.ButtonErrorCopy.Size = new System.Drawing.Size(20, 20);
             this.ButtonErrorCopy.TabIndex = 8;
-            this.ButtonErrorCopy.Text = "c";
             this.ButtonErrorCopy.UseVisualStyleBackColor = false;
-            this.ButtonErrorCopy.Visible = false;
+            this.ButtonErrorCopy.Click += new System.EventHandler(this.ButtonErrorCopy_Click);
+            // 
+            // ErrorImageList
+            // 
+            this.ErrorImageList.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("ErrorImageList.ImageStream")));
+            this.ErrorImageList.TransparentColor = System.Drawing.Color.Transparent;
+            this.ErrorImageList.Images.SetKeyName(0, "Error-Close.png");
+            this.ErrorImageList.Images.SetKeyName(1, "Error-Copy.png");
             // 
             // ButtonErrorClear
             // 
             this.ButtonErrorClear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.ButtonErrorClear.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(34)))));
-            this.ButtonErrorClear.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.ButtonErrorClear.Location = new System.Drawing.Point(487, 135);
+            this.ButtonErrorClear.BackColor = System.Drawing.Color.Transparent;
+            this.ButtonErrorClear.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.ButtonErrorClear.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.ButtonErrorClear.ImageIndex = 0;
+            this.ButtonErrorClear.ImageList = this.ErrorImageList;
+            this.ButtonErrorClear.Location = new System.Drawing.Point(490, 135);
             this.ButtonErrorClear.Name = "ButtonErrorClear";
-            this.ButtonErrorClear.Size = new System.Drawing.Size(24, 24);
+            this.ButtonErrorClear.Size = new System.Drawing.Size(20, 20);
             this.ButtonErrorClear.TabIndex = 7;
-            this.ButtonErrorClear.Text = "x";
             this.ButtonErrorClear.UseVisualStyleBackColor = false;
-            this.ButtonErrorClear.Visible = false;
+            this.ButtonErrorClear.Click += new System.EventHandler(this.ButtonErrorClear_Click);
             // 
             // InfoError
             // 
             this.InfoError.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.InfoError.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(34)))));
+            this.InfoError.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(30)))));
             this.InfoError.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.InfoError.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
             this.InfoError.Location = new System.Drawing.Point(6, 132);
@@ -732,6 +744,7 @@ namespace MailNotifier
             this.MainImageList.Images.SetKeyName(8, "MyQst.png");
             this.MainImageList.Images.SetKeyName(9, "MyInf.png");
             this.MainImageList.Images.SetKeyName(10, "MyErr.png");
+            this.MainImageList.Images.SetKeyName(11, "Error-Close.png");
             // 
             // MainContextMenu
             // 
@@ -842,8 +855,9 @@ namespace MailNotifier
         private Panel PanelSettingsAccount;
         private PropertyGrid PropertyGridAccount;
         private PropertyGrid PropertyGridProgramm;
-        private Button ButtonErrorClear;
         private Button ButtonErrorCopy;
+        private ImageList ErrorImageList;
+        private Button ButtonErrorClear;
     }
 }
 

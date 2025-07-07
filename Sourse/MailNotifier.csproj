@@ -165,6 +165,7 @@
     <EmbeddedResource Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\DataSources\MailNotifier.Properties.Settings.datasource" />
@@ -182,6 +183,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Images\Error-Close.png" />
     <Content Include="MailNotifier24.ico" />
   </ItemGroup>
   <ItemGroup>

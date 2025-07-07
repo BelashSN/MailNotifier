@@ -55,6 +55,7 @@ namespace MailNotifier
             {
                 ParamWork.Settings.ErrorText = "Ошибка инициализации настроек:\r\n-----\r\n" + e.Message;
                 ParamWork.Settings.IsError = true;
+                ParamWork.IsCriticalError = true;
                 return false;
             }
 
@@ -75,6 +76,7 @@ namespace MailNotifier
             {
                 ParamWork.Settings.ErrorText = "Ошибка списка аккаутнов:\r\n-----\r\n" + e.Message;
                 ParamWork.Settings.IsError = true;
+                ParamWork.IsCriticalError = true;
                 return false;
             }
             // --------------- /////!!!!! this.SaveSettings(); /////!!!!! - Удалить после разработки!!!!*/
