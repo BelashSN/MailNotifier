@@ -1,5 +1,5 @@
 ﻿// ------------ Не удалять, используется в Release !!!
-using System.Threading.Tasks; //  Не удалять!!!
+using System.Threading.Tasks;
 // ------------
 using S22.Imap;
 // ------------
@@ -11,6 +11,7 @@ using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Threading;
 using System.Windows.Forms;
 
 
@@ -512,6 +513,7 @@ namespace MailNotifier
         {
             try
             {
+                // ------------
                 using (ImapClient Client = new ImapClient(mAccount.Account.Host, mAccount.Account.Port,
                 mAccount.Account.Login, mAccount.Account.Password, AuthMethod.Login, true)) 
                 {
@@ -530,12 +532,25 @@ namespace MailNotifier
             }
         }
 
+        // ==================================== aaa
+        private void SetNotifyIconText(string Fulltext)
+        {
+            Type tNF = typeof(NotifyIcon);
+            BindingFlags hidden = BindingFlags.NonPublic | BindingFlags.Instance;           
+            tNF.GetField("text", hidden).SetValue(NotifyIconMain, Fulltext);
+            // ------------
+            if ((bool)tNF.GetField("added", hidden).GetValue(NotifyIconMain))
+                tNF.GetMethod("UpdateIcon", hidden).Invoke(NotifyIconMain, new object[] { true });
+        }
+
         // ==================================== Прочитать почту всех аккаунтов
         private void UpdateAllAccounts()
         {
             TimerTrayShow.Stop();
             NotifyIconMain.Icon = icTrayUpdate;
             Parameters.ParamWork.Settings.IsUpdate = true;
+            // ------------
+            string NotifyIconText = "Mail Notifier\r\n";
             // ------------
             Parameters.ParamWork.Settings.Count = 0;
             Parameters.ParamWork.Settings.CountBoxes = 0;
@@ -544,7 +559,29 @@ namespace MailNotifier
             foreach (WorkAccount Account in Parameters.ParamWork.Accounts)
             {
                 WorkAccount mAccount = Account;
-                UpdateCurrentAccount(ref mAccount);
+                mAccount.Count = -1;
+                // ------------
+                if (Parameters.ParamWork.Settings.SavedSettings.ClearErrors)
+                {
+                    mAccount.IsError = false;
+                    mAccount.ErrorText = "";
+                }
+                // ------------
+                Thread thisThread = new Thread(() => {
+                    UpdateCurrentAccount(ref mAccount);
+                });
+                // ------------
+                thisThread.Start();
+                thisThread.Join(10000);
+                thisThread.Abort();
+                // ------------
+                if (mAccount.Count < 0)
+                {
+                    mAccount.Count = 0;
+                    mAccount.IsError = true;
+                    mAccount.ErrorText = "Ошибка чтения почты:" 
+                        + "\r\n-----\r\nПрервано по тайиауту...";
+                }
                 // ------------
                 Account.MenuPanel.SetCount(Account.Count);
                 Account.LeftButton.SetCount(Account.Count);
@@ -561,15 +598,27 @@ namespace MailNotifier
             StatusFormMainCount.Text = "Всего непрочитанных писем: " +  Parameters.ParamWork.Settings.Count.ToString();
             StatusFormMainTime.Text = "Последняя проверка почты: " +  Parameters.ParamWork.Settings.LastCheck.ToString();
             // ------------
+            NotifyIconMain.Text = "Mail Notifier\r\n";
             if (Parameters.ParamWork.Settings.Count == 0)
-                NotifyIconMain.Icon = icTrayEmpty;
+            {
+                // ------------
+                NotifyIconText += "Непрочитанных писем: 0";
+                NotifyIconMain.Icon = icTrayEmpty;               
+            }               
             else
             {
+                // ------------               
+                NotifyIconText += "В " + Parameters.ParamWork.Settings.CountBoxes.ToString();
+                NotifyIconText += (Parameters.ParamWork.Settings.CountBoxes > 1) ? " аккаунтах" : " аккаунте";
+                NotifyIconText += "\r\nНепрочитанных писем: " + Parameters.ParamWork.Settings.Count.ToString();
+                // ------------
                 NotifyIconMain.Icon = icTrayOpen;
                 TimerTrayShow.Start();
             }
             // ------------
+            NotifyIconText += "\r\nНа:  " + Parameters.ParamWork.Settings.LastCheck.ToString();
             Parameters.ParamWork.Settings.IsUpdate = false;
+            SetNotifyIconText(NotifyIconText);
         }
 
         // ==================================== Получить название акаунта выбранного на панели

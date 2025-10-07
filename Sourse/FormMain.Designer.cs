@@ -61,10 +61,10 @@ namespace MailNotifier
             this.ButtonErrorCopy = new System.Windows.Forms.Button();
             this.ErrorImageList = new System.Windows.Forms.ImageList(this.components);
             this.ButtonErrorClear = new System.Windows.Forms.Button();
-            this.InfoError = new System.Windows.Forms.TextBox();
-            this.InfoLastCheck = new System.Windows.Forms.Label();
-            this.InfoMessages = new System.Windows.Forms.Label();
             this.InfoAccount = new System.Windows.Forms.Label();
+            this.InfoMessages = new System.Windows.Forms.Label();
+            this.InfoLastCheck = new System.Windows.Forms.Label();
+            this.InfoError = new System.Windows.Forms.TextBox();
             this.PanelSettingsProgramm = new System.Windows.Forms.Panel();
             this.PropertyGridProgramm = new System.Windows.Forms.PropertyGrid();
             this.PanelSettingsAccount = new System.Windows.Forms.Panel();
@@ -106,7 +106,7 @@ namespace MailNotifier
             this.NotifyIconMain.BalloonTipText = "Проверка почты не производилась...";
             this.NotifyIconMain.BalloonTipTitle = "Mail Notifier";
             this.NotifyIconMain.Icon = ((System.Drawing.Icon)(resources.GetObject("NotifyIconMain.Icon")));
-            this.NotifyIconMain.Text = "Mail Notifier";
+            this.NotifyIconMain.Text = "Mail Notifier\r\nПроверка почты не производилась...";
             this.NotifyIconMain.Visible = true;
             this.NotifyIconMain.MouseDown += new System.Windows.Forms.MouseEventHandler(this.NotifyIconMain_MouseDown);
             // 
@@ -433,6 +433,34 @@ namespace MailNotifier
             this.ButtonErrorClear.UseVisualStyleBackColor = false;
             this.ButtonErrorClear.Click += new System.EventHandler(this.ButtonErrorClear_Click);
             // 
+            // InfoAccount
+            // 
+            this.InfoAccount.AutoSize = true;
+            this.InfoAccount.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.InfoAccount.Location = new System.Drawing.Point(6, 10);
+            this.InfoAccount.Name = "InfoAccount";
+            this.InfoAccount.Size = new System.Drawing.Size(244, 18);
+            this.InfoAccount.TabIndex = 3;
+            this.InfoAccount.Text = "Аккаунт: test_account@test-mail.ru";
+            // 
+            // InfoMessages
+            // 
+            this.InfoMessages.AutoSize = true;
+            this.InfoMessages.Location = new System.Drawing.Point(6, 52);
+            this.InfoMessages.Name = "InfoMessages";
+            this.InfoMessages.Size = new System.Drawing.Size(206, 16);
+            this.InfoMessages.TabIndex = 4;
+            this.InfoMessages.Text = "Всего непрочитанных писем: 0";
+            // 
+            // InfoLastCheck
+            // 
+            this.InfoLastCheck.AutoSize = true;
+            this.InfoLastCheck.Location = new System.Drawing.Point(6, 93);
+            this.InfoLastCheck.Name = "InfoLastCheck";
+            this.InfoLastCheck.Size = new System.Drawing.Size(312, 16);
+            this.InfoLastCheck.TabIndex = 5;
+            this.InfoLastCheck.Text = "Проверка почты аккаунта не производилась...";
+            // 
             // InfoError
             // 
             this.InfoError.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -447,34 +475,6 @@ namespace MailNotifier
             this.InfoError.ReadOnly = true;
             this.InfoError.Size = new System.Drawing.Size(508, 204);
             this.InfoError.TabIndex = 6;
-            // 
-            // InfoLastCheck
-            // 
-            this.InfoLastCheck.AutoSize = true;
-            this.InfoLastCheck.Location = new System.Drawing.Point(6, 93);
-            this.InfoLastCheck.Name = "InfoLastCheck";
-            this.InfoLastCheck.Size = new System.Drawing.Size(312, 16);
-            this.InfoLastCheck.TabIndex = 5;
-            this.InfoLastCheck.Text = "Проверка почты аккаунта не производилась...";
-            // 
-            // InfoMessages
-            // 
-            this.InfoMessages.AutoSize = true;
-            this.InfoMessages.Location = new System.Drawing.Point(6, 52);
-            this.InfoMessages.Name = "InfoMessages";
-            this.InfoMessages.Size = new System.Drawing.Size(206, 16);
-            this.InfoMessages.TabIndex = 4;
-            this.InfoMessages.Text = "Всего непрочитанных писем: 0";
-            // 
-            // InfoAccount
-            // 
-            this.InfoAccount.AutoSize = true;
-            this.InfoAccount.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.InfoAccount.Location = new System.Drawing.Point(6, 10);
-            this.InfoAccount.Name = "InfoAccount";
-            this.InfoAccount.Size = new System.Drawing.Size(244, 18);
-            this.InfoAccount.TabIndex = 3;
-            this.InfoAccount.Text = "Аккаунт: test_account@test-mail.ru";
             // 
             // PanelSettingsProgramm
             // 
