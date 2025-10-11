@@ -27,6 +27,7 @@ namespace MailNotifier
         private Point MouseNow = new Point();
         private MouseClicked TrayMouse = new MouseClicked();
         private ParametersMain Parameters = new ParametersMain();
+
         // ------------
         private Icon icTrayEmpty;
         private Icon icTrayOpen;
@@ -103,16 +104,13 @@ namespace MailNotifier
                 Resolution.Bottom - Bounds.Height - 55);
             // ------------  Запрет автопроверки почты в режиме debug
             #if !DEBUG
-                Periods SavesPeriod = Parameters.ParamWork.Settings.SavedSettings.Period;
-                TimerTrayMail.Interval = PeriodToMilliseconds(SavesPeriod);
-                TimerTrayMail.Start();
                 // ------------
                 var tmp = Task.Run(async delegate { await Task.Delay(500); });
                 tmp.Wait();
-                // ------------
-                UpdateAllAccounts();
+                // ------------            
                 PanelSettingsAccount.Padding = new Padding(4, 44, 4, 11);
                 PanelSettingsProgramm.Padding = new Padding(4, 44, 4, 11);
+                UpdateAllAccountsPreProcessing();
             #endif
         }
 
@@ -218,11 +216,14 @@ namespace MailNotifier
         {
             if (e.KeyCode != Keys.Enter) {
                 LoginErrorLabel.Visible = false;
-                return; }
+                return; 
+            }
             // ------------
             if (LoginPassword.Text == Parameters.ParamWork.Settings.SavedSettings.Password) {
                 Parameters.ParamWork.Settings.IsAdmin = true;
-                ButtonFormHeaderAdmin_Click(sender, e); }
+                ButtonFormHeaderAdmin_Click(sender, e);
+                LoginPassword.Text = "";
+            }
             // ------------
             else LoginErrorLabel.Visible = true;
         }
@@ -230,6 +231,24 @@ namespace MailNotifier
         // ==================================== Событие При клике на ссылку деавторизации
         private void UnloginLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
+            // ------------
+            if (CaptionFormMain.Text.EndsWith("*"))
+            {
+                DialogResult DlgRes = CustomMsgBox.ShowQuestion();
+                // ------------
+                if (DlgRes == DialogResult.Cancel) return;
+                // ------------
+                else if (DlgRes == DialogResult.No)
+                {
+                    LoadParametersFromFile();
+                    ShowAccountParameters(false);
+                    ButtonFormHeaderSave.Visible = false;
+                    CaptionFormMain.Text = "Mail Notifier";
+                }
+                // ------------
+                else ButtonFormHeaderSave_Click(sender, e);
+            }
+            // ------------
             Parameters.ParamWork.Settings.IsAdmin = false;
             RebuildElementsByAutorization();
         }
@@ -258,6 +277,25 @@ namespace MailNotifier
         // ==================================== Событие При клике на кнопку заголовка - свернуть в трей
         private void ButtonFormHeaderToTray_Click(object sender, EventArgs e)
         {
+            // ------------
+            if (CaptionFormMain.Text.EndsWith("*"))
+            {
+                DialogResult DlgRes = CustomMsgBox.ShowQuestion();
+                // ------------
+                if (DlgRes == DialogResult.Cancel) return;
+                // ------------
+                else if (DlgRes == DialogResult.No)
+                {
+                    LoadParametersFromFile();
+                    ShowAccountParameters(false);
+                    RebuildElementsByAutorization();
+                    ButtonFormHeaderSave.Visible = false;
+                    CaptionFormMain.Text = "Mail Notifier";
+                }               
+                // ------------
+                else ButtonFormHeaderSave_Click(sender, e);
+            }
+            // ------------
             MinimazeAndMaximazeFormToTray();
             ButtonFormHeaderTray.FlatAppearance.MouseOverBackColor = Color.Transparent;
         }
@@ -272,28 +310,52 @@ namespace MailNotifier
         // ==================================== Событие При клике на кнопку заголовка - авторизация
         private void ButtonFormHeaderAdmin_Click(object sender, EventArgs e)
         {
-            if (PanelAutorization.Visible) {                
+            if (PanelAutorization.Visible) {
                 PanelAutorization.Visible = false;
-                RebuildElementsByAutorization(); }
+                RebuildElementsByAutorization();
+            }
             // ------------
-            else {            
+            else {
                 ToolsTabPanel.Visible = false;
                 LoginErrorLabel.Visible = false;
                 PanelSetInfoAccount.Visible = false;
                 PanelSettingsAccount.Visible = false;
                 PanelSettingsProgramm.Visible = false;
                 // ------------
+                bool IsAdmin = Parameters.ParamWork.Settings.IsAdmin;
+                bool IsPassFree = Parameters.ParamWork.Settings.SavedSettings.Password == "";
+                // ------------
                 PanelAutorization.Visible = true;
                 // ------------
-                if (Parameters.ParamWork.Settings.SavedSettings.Password == "")
-                {
-                    bool IsAdmin = !Parameters.ParamWork.Settings.IsAdmin;
-                    Parameters.ParamWork.Settings.IsAdmin = IsAdmin;
-                    // ------------
-                    if (IsAdmin) ButtonFormHeaderAdmin_Click(sender, e);
-                    else RebuildElementsByAutorization();
+                if (!IsAdmin && IsPassFree) {
+                    Parameters.ParamWork.Settings.IsAdmin = true;
+                    ButtonFormHeaderAdmin_Click(sender, e);
                 }
             }
+        }
+
+        // ==================================== !!!!!!!!!
+        private void ButtonFormHeaderSave_Click(object sender, EventArgs e)
+        {
+            if (!CaptionFormMain.Text.EndsWith("*")) return;
+            // ------------
+            bool SaveRes = Parameters.SaveSettings();
+            if (!SaveRes)
+                ErrorMessageShow(Parameters.ParamWork.Settings.ErrorText);
+            // ------------
+            else
+            {               
+                CaptionFormMain.Text = "Mail Notifier";
+                ButtonFormHeaderSave.Visible = false;
+                RebuildElementsByParameters();
+            }
+        }
+
+        // ==================================== !!!!!!!!!
+        private void PropertyGridProgramm_PropertyValueChanged(object s, PropertyValueChangedEventArgs e)
+        {
+            CaptionFormMain.Text = "Mail Notifier *";
+            ButtonFormHeaderSave.Visible = true;
         }
         // ------------
         #endregion
@@ -372,13 +434,22 @@ namespace MailNotifier
             switch (sender.Name)
             {
                 case "Exit":
-                    FormMain.Form.Close();  /////!!!!!?????
+                    // ------------
+                    if (CaptionFormMain.Text.EndsWith("*"))
+                    {
+                        DialogResult DlgRes = CustomMsgBox.ShowQuestion();
+                        // ------------
+                        if (DlgRes == DialogResult.Cancel) break;
+                        else if (DlgRes == DialogResult.Yes) ButtonFormHeaderSave_Click(sender, e);
+                    }
+                    // ------------
+                    FormMain.Form.Close();
                     break;
                 case "Tray":
                     MinimazeAndMaximazeFormToTray();
                     break;
                 case "Update":
-                    UpdateAllAccounts();
+                    UpdateAllAccountsPreProcessing();
                     if (Parameters.ParamWork.Settings.CurrentAccount != null) ShowAccountParameters(true);
                     break;
                 default:
@@ -508,6 +579,43 @@ namespace MailNotifier
             MainSplitContainer.Visible = true;
         }
 
+        // ==================================== Установить текст tooltyp в трее > 64 символов
+        private void UpdateAllAccountsPostProcessing()
+        {
+            string NotifyIconText = "Mail Notifier\r\n";
+            // ------------
+            Parameters.ParamWork.Settings.LastCheck = DateTime.Now;
+            StatusFormMainCount.Text = "Всего непрочитанных писем: " + Parameters.ParamWork.Settings.Count.ToString();
+            StatusFormMainTime.Text = "Последняя проверка почты: " + Parameters.ParamWork.Settings.LastCheck.ToString();
+            // ------------
+            if (Parameters.ParamWork.Settings.Count == 0)
+            {
+                // ------------
+                NotifyIconText += "Непрочитанных писем: 0";
+                NotifyIconMain.Icon = icTrayEmpty;
+            }
+            else
+            {
+                // ------------               
+                NotifyIconText += "В " + Parameters.ParamWork.Settings.CountBoxes.ToString();
+                NotifyIconText += (Parameters.ParamWork.Settings.CountBoxes > 1) ? " аккаунтах" : " аккаунте";
+                NotifyIconText += "\r\nНепрочитанных писем: " + Parameters.ParamWork.Settings.Count.ToString();
+                // ------------
+                NotifyIconMain.Icon = icTrayOpen;
+                TimerTrayShow.Start();
+            }
+            // ------------
+            NotifyIconText += "\r\nНа:  " + Parameters.ParamWork.Settings.LastCheck.ToString();
+            // ------------
+            Parameters.ParamWork.Settings.IsUpdate = false;
+            Type tNF = typeof(NotifyIcon);
+            BindingFlags hidden = BindingFlags.NonPublic | BindingFlags.Instance;
+            tNF.GetField("text", hidden).SetValue(NotifyIconMain, NotifyIconText);
+            // ------------
+            if ((bool)tNF.GetField("added", hidden).GetValue(NotifyIconMain))
+                tNF.GetMethod("UpdateIcon", hidden).Invoke(NotifyIconMain, new object[] { true });
+        }
+
         // ==================================== Прочитать почту выбранного аккаунта 
         private void UpdateCurrentAccount(ref WorkAccount mAccount)
         {
@@ -532,25 +640,17 @@ namespace MailNotifier
             }
         }
 
-        // ==================================== aaa
-        private void SetNotifyIconText(string Fulltext)
-        {
-            Type tNF = typeof(NotifyIcon);
-            BindingFlags hidden = BindingFlags.NonPublic | BindingFlags.Instance;           
-            tNF.GetField("text", hidden).SetValue(NotifyIconMain, Fulltext);
-            // ------------
-            if ((bool)tNF.GetField("added", hidden).GetValue(NotifyIconMain))
-                tNF.GetMethod("UpdateIcon", hidden).Invoke(NotifyIconMain, new object[] { true });
-        }
-
         // ==================================== Прочитать почту всех аккаунтов
         private void UpdateAllAccounts()
-        {
+        {            
             TimerTrayShow.Stop();
+            // ------------
+            bool isAutoCheck = Parameters.ParamWork.Settings.SavedSettings.AutoCheck;
+            isAutoCheck = isAutoCheck && Parameters.ParamWork.Accounts.Count > 0;
+            if (!isAutoCheck) return;
+            // ------------
             NotifyIconMain.Icon = icTrayUpdate;
             Parameters.ParamWork.Settings.IsUpdate = true;
-            // ------------
-            string NotifyIconText = "Mail Notifier\r\n";
             // ------------
             Parameters.ParamWork.Settings.Count = 0;
             Parameters.ParamWork.Settings.CountBoxes = 0;
@@ -594,31 +694,15 @@ namespace MailNotifier
                 Parameters.ParamWork.Settings.IsError = Parameters.ParamWork.Settings.IsError || Account.IsError;
             }
             // ------------
-            Parameters.ParamWork.Settings.LastCheck = DateTime.Now;
-            StatusFormMainCount.Text = "Всего непрочитанных писем: " +  Parameters.ParamWork.Settings.Count.ToString();
-            StatusFormMainTime.Text = "Последняя проверка почты: " +  Parameters.ParamWork.Settings.LastCheck.ToString();
-            // ------------
-            NotifyIconMain.Text = "Mail Notifier\r\n";
-            if (Parameters.ParamWork.Settings.Count == 0)
-            {
-                // ------------
-                NotifyIconText += "Непрочитанных писем: 0";
-                NotifyIconMain.Icon = icTrayEmpty;               
-            }               
-            else
-            {
-                // ------------               
-                NotifyIconText += "В " + Parameters.ParamWork.Settings.CountBoxes.ToString();
-                NotifyIconText += (Parameters.ParamWork.Settings.CountBoxes > 1) ? " аккаунтах" : " аккаунте";
-                NotifyIconText += "\r\nНепрочитанных писем: " + Parameters.ParamWork.Settings.Count.ToString();
-                // ------------
-                NotifyIconMain.Icon = icTrayOpen;
-                TimerTrayShow.Start();
-            }
-            // ------------
-            NotifyIconText += "\r\nНа:  " + Parameters.ParamWork.Settings.LastCheck.ToString();
-            Parameters.ParamWork.Settings.IsUpdate = false;
-            SetNotifyIconText(NotifyIconText);
+            UpdateAllAccountsPostProcessing();          
+        }
+
+        // ==================================== Прочитать почту всех аккаунтов
+        private void UpdateAllAccountsPreProcessing()
+        {
+            TimerTrayMail.Stop();
+            UpdateAllAccounts();
+            TimerTrayMail_start();
         }
 
         // ==================================== Получить название акаунта выбранного на панели
@@ -737,11 +821,13 @@ namespace MailNotifier
         {
             MainLeftPanel.Controls.Clear();
             MainMenuStrip.Items.Clear();
+            TimerTrayMail.Stop();
             // ------------           
             foreach (var MyAccount in Parameters.ParamWork.Accounts)
                 CreateAccountsLinks(MyAccount);
             // ------------
             CreateFixedMenuitems();
+            TimerTrayMail_start();
             // ------------ ------------
             ToolsAnonLabel.Text = "Всего настроено аккаунтов:  " +
                 Parameters.ParamWork.Accounts.Count.ToString();
@@ -835,12 +921,13 @@ namespace MailNotifier
         // ================================= Загрузить настройки программы из файла настроек 
         private void LoadParametersFromFile()
         {
-            bool Res = Parameters.LoadSettings();
+            Parameters = new ParametersMain();
+            bool LoadRes = Parameters.LoadSettings();
             // ------------
             RebuildElementsByParameters();
             UpdateParametersPanel();
             // ------------
-            if (!Res) ErrorMessageShow( Parameters.ParamWork.Settings.ErrorText);
+            if (!LoadRes) ErrorMessageShow( Parameters.ParamWork.Settings.ErrorText);
         }
 
         // ==================================== Установка ToolTip для кнопок формы
@@ -854,6 +941,9 @@ namespace MailNotifier
             // ------------
             ToolTip tButtonFormHeaderAdmin = new ToolTip();
             tButtonFormHeaderAdmin.SetToolTip(ButtonFormHeaderAdmin, "Режим администрирования");
+            // ------------
+            ToolTip tButtonFormHeaderSave = new ToolTip();
+            tButtonFormHeaderAdmin.SetToolTip(ButtonFormHeaderSave, "Сохранить настройки");
             // ------------
             ToolTip tButtonErrorClear = new ToolTip();
             tButtonErrorClear.SetToolTip(ButtonErrorClear, "Очистить сообщение об ошибке");
@@ -883,6 +973,10 @@ namespace MailNotifier
             ButtonFormHeaderAdmin.FlatAppearance.MouseDownBackColor = ColorTranslator.FromHtml("#006");
             ButtonFormHeaderAdmin.FlatAppearance.MouseOverBackColor = ColorTranslator.FromHtml("#007");
             // ------------
+            ButtonFormHeaderSave.FlatAppearance.BorderSize = 0;
+            ButtonFormHeaderSave.FlatAppearance.MouseDownBackColor = ColorTranslator.FromHtml("#006");
+            ButtonFormHeaderSave.FlatAppearance.MouseOverBackColor = ColorTranslator.FromHtml("#007");
+            // ------------
             icTrayEmpty = Icon.FromHandle(((Bitmap)MainImageList.Images["MailNotifier48.png"]).GetHicon());
             icTrayOpen = Icon.FromHandle(((Bitmap)MainImageList.Images["TrayOpen48.png"]).GetHicon());
             icTrayClose = Icon.FromHandle(((Bitmap)MainImageList.Images["TrayClosed48.png"]).GetHicon());
@@ -891,7 +985,7 @@ namespace MailNotifier
             NotifyIconMain.Icon = icTrayEmpty;
         }
         // ------------
-        #endregion
+#endregion
 
 
         // ==========================================================================
@@ -907,16 +1001,18 @@ namespace MailNotifier
             // ------------
             if (TrayMouse.Button == MouseButtons.Right)
             {
-                if (TrayMouse.Count > 1) UpdateAllAccounts();
+                if (TrayMouse.Count > 1) UpdateAllAccountsPreProcessing();
                 else OpenTrayMenu();
             }
             // ------------
             if (TrayMouse.Button == MouseButtons.Left)
             {
-                if (TrayMouse.Count > 1) MinimazeAndMaximazeFormToTray();               
-                else  {
+                if (TrayMouse.Count > 1) ButtonFormHeaderToTray_Click(sender, e);
+                else
+                {
                     /////!!!!! UpdateAllAccounts(); /////!!!!!
-                    OpenTrayMenu(); }
+                    OpenTrayMenu();
+                }
             }
             // ------------
             TrayMouse.Reset();
@@ -939,7 +1035,7 @@ namespace MailNotifier
         {
             if (e.Button == MouseButtons.Middle)
             {
-                UpdateAllAccounts(); return;
+                UpdateAllAccountsPreProcessing(); return;
             }
             // ------------
             if (TimerTrayClick.Enabled && e.Button == TrayMouse.Button)
@@ -953,7 +1049,21 @@ namespace MailNotifier
             TrayMouse.Count = 1;
             TrayMouse.Button = e.Button;
         }
+
+        // ==================================== Запуск автопроверки почты
+        private void TimerTrayMail_start()
+        {
+            #if !DEBUG
+                Periods SavesPeriod = Parameters.ParamWork.Settings.SavedSettings.Period;
+                TimerTrayMail.Interval = PeriodToMilliseconds(SavesPeriod);
+                // ------------
+                bool isAutoCheck = Parameters.ParamWork.Settings.SavedSettings.AutoCheck;
+                isAutoCheck = isAutoCheck && Parameters.ParamWork.Accounts.Count > 0;
+                if (isAutoCheck) TimerTrayMail.Start();
+             #endif
+        }
         // ------------
         #endregion
     }
+    // ------------
 }

@@ -41,6 +41,7 @@ namespace MailNotifier
             this.MainMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.NotifyIconMenuStripBaseExit = new System.Windows.Forms.ToolStripMenuItem();
             this.PanelFormMainHeader = new System.Windows.Forms.Panel();
+            this.ButtonFormHeaderSave = new System.Windows.Forms.Button();
             this.ButtonFormHeaderAdmin = new System.Windows.Forms.Button();
             this.ButtonFormHeaderMenu = new System.Windows.Forms.Button();
             this.ButtonFormHeaderTray = new System.Windows.Forms.Button();
@@ -127,6 +128,7 @@ namespace MailNotifier
             // PanelFormMainHeader
             // 
             this.PanelFormMainHeader.BackColor = System.Drawing.Color.Transparent;
+            this.PanelFormMainHeader.Controls.Add(this.ButtonFormHeaderSave);
             this.PanelFormMainHeader.Controls.Add(this.ButtonFormHeaderAdmin);
             this.PanelFormMainHeader.Controls.Add(this.ButtonFormHeaderMenu);
             this.PanelFormMainHeader.Controls.Add(this.ButtonFormHeaderTray);
@@ -139,6 +141,22 @@ namespace MailNotifier
             this.PanelFormMainHeader.MouseDown += new System.Windows.Forms.MouseEventHandler(this.PanelFormMainHeader_MouseDown);
             this.PanelFormMainHeader.MouseMove += new System.Windows.Forms.MouseEventHandler(this.PanelFormMainHeader_MouseMove);
             this.PanelFormMainHeader.MouseUp += new System.Windows.Forms.MouseEventHandler(this.PanelFormMainHeader_MouseUp);
+            // 
+            // ButtonFormHeaderSave
+            // 
+            this.ButtonFormHeaderSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.ButtonFormHeaderSave.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.ButtonFormHeaderSave.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.ButtonFormHeaderSave.Image = ((System.Drawing.Image)(resources.GetObject("ButtonFormHeaderSave.Image")));
+            this.ButtonFormHeaderSave.Location = new System.Drawing.Point(663, 2);
+            this.ButtonFormHeaderSave.Margin = new System.Windows.Forms.Padding(0);
+            this.ButtonFormHeaderSave.Name = "ButtonFormHeaderSave";
+            this.ButtonFormHeaderSave.Padding = new System.Windows.Forms.Padding(0, 0, 0, 2);
+            this.ButtonFormHeaderSave.Size = new System.Drawing.Size(36, 32);
+            this.ButtonFormHeaderSave.TabIndex = 5;
+            this.ButtonFormHeaderSave.UseVisualStyleBackColor = true;
+            this.ButtonFormHeaderSave.Visible = false;
+            this.ButtonFormHeaderSave.Click += new System.EventHandler(this.ButtonFormHeaderSave_Click);
             // 
             // ButtonFormHeaderAdmin
             // 
@@ -516,6 +534,7 @@ namespace MailNotifier
             this.PropertyGridProgramm.ViewBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(32)))));
             this.PropertyGridProgramm.ViewBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(70)))));
             this.PropertyGridProgramm.ViewForeColor = System.Drawing.Color.Gainsboro;
+            this.PropertyGridProgramm.PropertyValueChanged += new System.Windows.Forms.PropertyValueChangedEventHandler(this.PropertyGridProgramm_PropertyValueChanged);
             // 
             // PanelSettingsAccount
             // 
@@ -858,6 +877,7 @@ namespace MailNotifier
         private Button ButtonErrorCopy;
         private ImageList ErrorImageList;
         private Button ButtonErrorClear;
+        private Button ButtonFormHeaderSave;
     }
 }
 
