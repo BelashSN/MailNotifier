@@ -14,9 +14,6 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
 
-//////!!!!!! - Планируемые доработки
-/// спросить ИИ о структуре проекта, переразместить методы по модулям для читаемости
-
 // ==============================================================
 namespace MailNotifier
 {
@@ -80,6 +77,49 @@ namespace MailNotifier
         // ==========================================================================
         #region ===================    Основные события формы     ===================
         /* ------------ */
+        // ==================================== Основная функция, которая убирает мерцания
+        protected override CreateParams CreateParams
+        {
+            get
+            {
+                // - добавим стиль WS_EX_COMPOSITED для формы
+                CreateParams handleParam = base.CreateParams;
+                handleParam.ExStyle |= 0x02000000;   // WS_EX_COMPOSITED       
+                return handleParam;
+            }
+        }
+
+        // ==================================== Дополнительная функция, которая убирает мерцания
+        void SetDoubleBuffered(Control c, bool value)
+        {
+            // - получим доступ к защищенному свойству DoubleBuffered класса Control через рефлексию
+            PropertyInfo pi = typeof(Control).GetProperty("DoubleBuffered",
+                BindingFlags.SetProperty | BindingFlags.Instance | BindingFlags.NonPublic);
+
+            // - если свойство найдено, установим его значение для данного контрола и обновим стили отрисовки
+            if (pi != null)
+            {
+                // - установим значение свойства DoubleBuffered для данного контрола
+                pi.SetValue(c, value, null);
+
+                // - получим доступ к защищенному методу SetStyle класса Control через рефлексию
+                MethodInfo mi = typeof(Control).GetMethod("SetStyle",
+                    BindingFlags.Instance | BindingFlags.InvokeMethod | BindingFlags.NonPublic);
+
+                // - установим стили отрисовки для данного контрола, включая двойную буферизацию и уменьшая мерцание
+                if (mi != null)
+                    mi.Invoke(c, new object[] {
+                        ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer, true });
+
+                // - получим доступ к защищенному методу UpdateStyles класса Control через рефлексию
+                mi = typeof(Control).GetMethod("UpdateStyles",
+                    BindingFlags.Instance | BindingFlags.InvokeMethod | BindingFlags.NonPublic);
+
+                // - вызовем метод UpdateStyles для данного контрола, чтобы применить изменения стилей отрисовки
+                if (mi != null) mi.Invoke(c, null);
+            }
+        }
+
         // ==================================== Событие При отрисовке панели формы (градиентная заливка)
         private void PanelFormMain_Paint(object sender, PaintEventArgs e)
         {
@@ -137,6 +177,13 @@ namespace MailNotifier
 #endif
         }
 
+        // ------------
+        #endregion
+
+
+        // ==========================================================================
+        #region ===================    Перемещение окна формы     ===================
+        /* ------------ */
         // ==================================== Событие При нажатии мыши на заголовок Формы (старт перемещения) 
         private void PanelFormMainHeader_MouseDown(object sender, MouseEventArgs e)
         {
@@ -183,6 +230,13 @@ namespace MailNotifier
             ButtonFormHeaderTray.FlatAppearance.MouseOverBackColor = Color.Transparent;
         }
 
+        // ------------
+        #endregion
+
+
+        // ==========================================================================
+        #region ==========  Реакция на наведение мышью на элементы формы  ===========
+        /* ------------ */
         // ==================================== Событие При наведении мыши на переклчатель закладок (цвет)
         private void RightLink_MouseHover(object sender, EventArgs e)
         {
@@ -249,6 +303,13 @@ namespace MailNotifier
             ((LinkLabel)sender).LinkColor = Color.LightBlue;
         }
 
+        // ------------
+        #endregion
+
+
+        // ==========================================================================
+        #region ===================    События при авторизации    ===================
+        /* ------------ */
         // ==================================== Событие При вводе пароля администратора (авторизация)
         private void LoginPassword_KeyDown(object sender, KeyEventArgs e)
         {
@@ -300,6 +361,13 @@ namespace MailNotifier
             RebuildElementsByAutorization();
         }
 
+        // ------------
+        #endregion
+
+
+        // ==========================================================================
+        #region =====================    События окна ошибок    =====================
+        /* ------------ */
         // ==================================== Событие При клике на кнопку - скопировать сообщение ошибки
         private void ButtonErrorCopy_Click(object sender, EventArgs e)
         {
@@ -323,6 +391,74 @@ namespace MailNotifier
                 // - обновить данные панели параметров
                 ShowAccountParameters(true);
             }
+        }
+
+        // ------------
+        #endregion
+
+
+        // ==========================================================================
+        #region ================  События кнопок на заголовке формы  ================
+        /* ------------ */
+        // ==================================== Сворачивание и разворачивание окна программы в трей 
+        private void MinimazeAndMaximazeFormToTray()
+        {
+            // - скроем основной контейнер формы
+            MainSplitContainer.Visible = false;
+
+            // - скроем окно программы 
+            Visible = !Visible;
+            ShowInTaskbar = !ShowInTaskbar;
+
+            // - найдем кнопку сворачивания в трей в меню, иначе - выход           
+            ToolStripItem[] ThisMenuItem = MainMenuStrip.Items.Find("Tray", true);
+            if (ThisMenuItem[0] == null) return;
+
+            // - получим панель с кнопкой сворачивания в трей
+            var tlPanel = ((ToolStripControlHost)ThisMenuItem[0]).Control;
+            if (tlPanel == null) return;
+
+            // - получим колонку панели
+            var tlColumn = (TableLayoutPanel)tlPanel.Controls[0];
+            if (tlColumn == null) return;
+
+            // - получим картинку в колонке панели
+            var tlpPicBox = (PictureBox)tlColumn.Controls[0];
+            if (tlpPicBox == null) return;
+
+            // - изменим картинку в колонке панели
+            string MenuIcon = Visible ? "MenuToTray48.png" : "MenuFromTray48.png";
+            tlpPicBox.Image = MainImageList.Images[MenuIcon];
+
+            // - получим текст в колонке панели
+            var tlpCapt = (ColorLabel)tlColumn.Controls[1];
+            if (tlpCapt == null) return;
+
+            // - изменим текст в колонке панели
+            tlpCapt.Text = Visible ? "Сврнуть окно настроек" : "Открыть окно настроек";
+
+            // - отобразим панель навигации
+            ToolsTabPanel.Visible = true;
+            PanelSetInfoAccount.Visible = true;
+
+            // - если свернули окно...
+            if (!Visible)
+            {
+                // - выйдем из режима администратора, сбросим текущий аккаунт
+                Parameters.ParamWork.Settings.IsAdmin = false;
+                Parameters.ParamWork.Settings.CurrentAccount = null;
+
+                // - перерисуем все элементы формы (без авторизации)
+                RebuildElementsByAutorization();
+                ShowAccountParameters(true);
+
+                // - сбросим цвет всех кнопок в левой панели аккаунтов
+                foreach (WorkAccount mAccount in Parameters.ParamWork.Accounts)
+                    mAccount.LeftButton.BtnPanel.BackColor = ColorTranslator.FromHtml("#00001a");
+            }
+
+            // - отобразим основной контейнер формы
+            MainSplitContainer.Visible = true;
         }
 
         // ==================================== Событие При клике на кнопку заголовка - свернуть в трей
@@ -433,284 +569,372 @@ namespace MailNotifier
 
 
         // ==========================================================================
-        #region ===============  Функции панелей настройки Editors   ================
+        #region ============== Динамическое изменение элементов формы  ==============
         /* ------------ */
-        // ==================================== Получение размера периода в миллисекундах
-        public int PeriodToMilliseconds(Periods Into)
+        // ==================================== Создание обязательных кнпок меню
+        private void CreateFixedMenuitems()
         {
-            return int.Parse(Into.ToString().Replace("m", ""));
-        }
+            // - верхний разделитель
+            MainMenuStrip.Items.Add("-");
 
-        // ==================================== Получение значения периода из миллисекунд
-        public Periods MillisecondsToPeriod(int Into)
-        {
-            return (Periods)Enum.Parse(typeof(Periods), Into.ToString());
-        }
-
-        // ==================================== Обновление панели аккаунтов
-        private void UpdateAccuuntPanel()
-        {
-            // - если аккаунт не выбран, очистим панель и выйдем
-            if (Parameters.ParamWork.Settings.CurrentAccount == null) return;
-
-            // - если аккаунт выбран, отобразим его настройки
-            PropertyGridAccount.SelectedObject = Parameters.ParamWork.Settings.CurrentAccount.Account;
-            PropertyGridAccount.ViewForeColor = Color.Gainsboro;
-            PropertyGridAccount.ForeColor = Color.Gainsboro;
-        }
-
-        // ==================================== Обновление панели настроек
-        private void UpdateParametersPanel()
-        {
-            
-            // - выделим текущие настройки программы
-            PropertyGridProgramm.SelectedObject = Parameters.ParamWork.Settings.SavedSettings;
-            PropertyGridProgramm.ViewForeColor = Color.Gainsboro;
-            PropertyGridProgramm.ForeColor = Color.Gainsboro;
-        }
-
-        // ------------
-        #endregion
-
-
-        // ==========================================================================
-        #region ===============  Функции внешнего вызова из классов  ================
-        /* ------------*/
-        // ==================================== Показать сообщение об ошибке
-        private void ErrorMessageShow(String ErrorMessage)
-        {
-            // - если нет ошибки, очистим панель и выйдем
-            InfoError.Visible = true;
-            ButtonErrorCopy.Visible = true;
-            ButtonErrorClear.Visible = true;
-
-            // - разлочим кнопку очистки ошибки только, если ошибка не критическая
-            ButtonErrorClear.Enabled = !Parameters.ParamWork.IsCriticalError;
-
-            // - отобразим текст ошибкина панели ошибок
-            InfoError.Text = ErrorMessage;
-        }
-
-        // ==================================== Очистить сообщение об ошибке
-        private void ErrorMessageClear()
-        {
-            // - очистим панель ошибок
-            InfoError.Visible = false;
-            ButtonErrorCopy.Visible = false;
-            ButtonErrorClear.Visible = false;
-
-            // - очистим текст ошибки на панели ошибок
-            InfoError.Text = "";
-        }
-
-        // ==================================== Закрыть главное меню
-        private void MainMenuStripClose()
-        {
-            MainMenuStrip.Close();
-        }
-
-        // ==================================== Обработка клика по панели кнопок
-        public void BtnPanelClick(ButtonPanel sender, EventArgs e)
-        {
-            // - закрыть главное меню, если клик был из него 
-            MainMenuStripClose();
-            
-            // - определить действие по имени кнопки
-            switch (sender.Name)
+            // - кнопка обновить почту
+            ButtonPanel CurrentItemButton = new ButtonPanel(null, "Update")
             {
-                // - если нажата кнопка выхода, проверим наличие несохраненных изменений
-                case "Exit":
-                    // - если есть несохраненные изменения, спросим, что делать
-                    if (CaptionFormMain.Text.EndsWith("*"))
-                    {
-                        DialogResult DlgRes = CustomMsgBox.ShowQuestion();
-                        
-                        // - если пользователь отменил действие, не закрываем программу
-                        if (DlgRes == DialogResult.Cancel) break;
+                IsMenu = true,
+                IsCount = false,
+                IconName = "TrayUpdate48.png",
+                Caption = "Перечитать почту",
+            };
+            // ------------
+            CurrentItemButton.Iinitialize();
+            // ------------ панель на кнопке
+            PanelMenuItem CurrentItem = new PanelMenuItem(CurrentItemButton, new Size(260, 28))
+            {
+                Margin = new Padding(-6, 0, 9, 0),
+                Dock = DockStyle.Fill
+            };
+            // ------------ добавление пунта меню
+            MainMenuStrip.Items.Add(CurrentItem);
 
-                        // - если пользователь согласился, сэмулируем сохранение изменения
-                        else if (DlgRes == DialogResult.Yes) ButtonFormHeaderSave_Click(sender, e);
-                    }
+            // - кнопка свернуть/развернуть форму настроек
+            CurrentItemButton = new ButtonPanel(null, "Tray")
+            {
+                IsMenu = true,
+                IsCount = false,
+                IconName = "MenuToTray48.png",
+                Caption = "Сврнуть окно настроек",
+            };
+            CurrentItemButton.Iinitialize();
+            // ------------ панель на кнопке
+            CurrentItem = new PanelMenuItem(CurrentItemButton, new Size(260, 28))
+            {
+                Margin = new Padding(-6, 0, 9, 0),
+                Dock = DockStyle.Fill,
+                Name = "Tray"
+            };
+            // ------------ добавление пунта меню
+            MainMenuStrip.Items.Add(CurrentItem);
 
-                    // - закрыть программу
-                    FormMain.Form.Close();
-                    break;
+            // - средний разделитель
+            MainMenuStrip.Items.Add("-");
 
-                // - если нажата кнопка сворачивания в трей, свернуть / развернуть окно
-                case "Tray":
-                    MinimazeAndMaximazeFormToTray();
-                    break;
+            // - кнопка выхода
+            ButtonPanel CurrentItemButton1 = new ButtonPanel(null, "Exit")
+            {
+                IsMenu = true,
+                IsCount = false,
+                IconName = "MunuExit48.png",
+                Caption = "Выйти из программы",
+            };
+            // ------------
+            CurrentItemButton1.Iinitialize();
+            // - панель на кнопке
+            CurrentItem = new PanelMenuItem(CurrentItemButton1, new Size(260, 28))
+            {
+                Margin = new Padding(-6, 0, 9, 0),
+                Dock = DockStyle.Fill
+            };
+            // ------------ добавление пунта меню
+            MainMenuStrip.Items.Add(CurrentItem);
 
-                // - если нажата кнопка обновления, перечитать почту во всех аккаунтах и обновить отображение
-                case "Update":
-                    UpdateAllAccountsPreProcessing();
-                    if (Parameters.ParamWork.Settings.CurrentAccount != null) ShowAccountParameters(true);
-                    break;
+            // - расчет высоты меню
+            MainMenuStrip.Height = 102 + 28 * Parameters.ParamWork.Accounts.Count;
+        }
 
-                // - для остальных кнопок (кнопки аккаунтов в меню и на панели)
-                default:
+        // ================================= Создание кнопки и меню Аккаутна
+        private void CreateAccountsLinks(WorkAccount mAccount)
+        {
+            // - создание панели - контейнера
+            Panel BtnContainer = new Panel
+            {
+                Name = "Cnt_" + mAccount.Name,
+                Dock = DockStyle.Top,
+                Height = 42
+            };
 
-                    // - найти аккаунт, связанный с кнопкой, по имени
-                    WorkAccount mAccount = Parameters.ParamWork.Accounts.Find(item => item.Name == sender.Name);
+            // - создание панели-кнопки для левой панели
+            ButtonPanel BtnElement = new ButtonPanel(mAccount)
+            {
+                IsMenu = false,
+                Count = mAccount.Count,
+                IsAlert = mAccount.IsError,
+                IconColor = mAccount.Account.Color,
+            };
+            BtnElement.Iinitialize();
 
-                    // - если клик был из меню, открыть аккаунт в браузере, 
-                    if (sender.IsMenu) {
-                        if (mAccount != null) OpenAccountInBrowser(mAccount);
-                        return; }
+            // - добавление панели-кнопки в контейнер
+            BtnContainer.Controls.Add(BtnElement.BtnPanel);
+            MainLeftPanel.Controls.Add(BtnContainer);
+            MainLeftPanel.Controls.SetChildIndex(BtnContainer, 0);
 
-                    //  - иначе (клик по левой панели) отобразить настройки аккаунта
-                    else
-                    {
-                        // - если аккаунт уже выбран, сбросить цвет его кнопки на панели и в меню
-                        if (Parameters.ParamWork.Settings.CurrentAccount != null) 
-                        {
-                            WorkAccount CurrentAccount = Parameters.ParamWork.Settings.CurrentAccount;
-                            CurrentAccount.LeftButton.BtnPanel.Controls["P_Caption"].ForeColor = Color.Gainsboro;
-                            CurrentAccount.LeftButton.BtnPanel.BackColor = ColorTranslator.FromHtml("#00001a"); 
-                        }
+            // ------------ ------------
+            // - ривязка событий для поддержки Drag-and-Drop (только в режиме админа)
+            BtnElement.BtnPanel.MouseMove += AccountPanel_MouseMove; ////!!!! - ??????
+            BtnContainer.MouseMove += AccountPanel_MouseUp;
+            // ------------
+            BtnElement.BtnPanel.MouseDown += AccountPanel_MouseDown;
+            BtnElement.BtnPanel.MouseUp += AccountPanel_MouseUp;
+            BtnContainer.MouseUp += AccountPanel_MouseUp;
 
-                        // - установить цвет кнопки выбранного аккаунта на панели и в меню
-                        if (mAccount != null) {
-                            mAccount.LeftButton.BtnPanel.Controls["P_Caption"].ForeColor = Color.White;
-                            mAccount.LeftButton.BtnPanel.BackColor = ColorTranslator.FromHtml("#005"); }
+            // ------------ ------------
+            // - добавление кнопки в левую панель
+            mAccount.LeftButton = BtnElement;
 
-                        // - выделить / снять  выделение аккаунта, отобразить изменения на панели настроек
-                        bool IsCurrent = Parameters.ParamWork.Settings.CurrentAccount == mAccount;
-                        Parameters.ParamWork.Settings.CurrentAccount = (IsCurrent) ? null : mAccount;
-                        ShowAccountParameters(true);
-                    }
-                    // ------------
-                    break;
+            // - создание панели-кнопки для меню
+            ButtonPanel MenuElement = new ButtonPanel(mAccount)
+            {
+                IsMenu = true,
+                Count = mAccount.Count,
+                IsAlert = mAccount.IsError,
+                IconColor = mAccount.Account.Color,
+            };
+            MenuElement.Iinitialize();
+
+            // - параметры пункта меню
+            PanelMenuItem CurrentItem = new PanelMenuItem(MenuElement, new Size(260, 28))
+            {
+                Margin = new Padding(-6, 0, 9, 0),
+                Dock = DockStyle.Fill
+            };
+
+            // - добавление пункта в меню
+            MainMenuStrip.Items.Add(CurrentItem);
+
+            // - моъранение ссылки напункт меню в аккаунт
+            mAccount.MenuPanel = MenuElement;
+        }
+
+        // ================================= Пересоздать меню при Изменении параметров
+        private void RebuildElementsByParameters()
+        {
+            // - очистка меню и левой панели
+            MainLeftPanel.Controls.Clear();
+            MainMenuStrip.Items.Clear();
+            TimerTrayMail.Stop();
+
+            // - создадим меню для каждого настроенного аккаунта          
+            foreach (var MyAccount in Parameters.ParamWork.Accounts)
+                CreateAccountsLinks(MyAccount);
+
+            // - создадим фиксированные пункты меню
+            CreateFixedMenuitems();
+            TimerTrayMail_start();
+
+            // - отображение счетчика настроенных аккаунтов
+            ToolsAnonLabel.Text = "Всего настроено аккаунтов:  " +
+                Parameters.ParamWork.Accounts.Count.ToString();
+        }
+
+        // ==================================== Открыть выбранный аккаунт в браузере
+        private void OpenAccountInBrowser(WorkAccount mAccount)
+        {
+            try
+            {
+                // - попытаемся открыть в браузере из настроек приложения
+                Process.Start(Parameters.ParamWork.Settings.SavedSettings.Browser, mAccount.Account.Url);
             }
-        }
-        
-        // ------------
-        #endregion
-
-
-        // ==========================================================================
-        #region =================  Обобщенные функции формы    ======================
-        /* ------------ */
-
-        // ---- для скрытия иконки меню на панели задач
-        // ---- экземпляр класса для работы с окнами из dll
-        [DllImport("User32.dll", ExactSpelling = true, CharSet = CharSet.Auto)]
-        // - функция для установки активности окна
-        public static extern bool SetForegroundWindow(HandleRef hWnd);
-        /* ------------ */
-
-        // ==================================== Реально убирает мерцания
-        protected override CreateParams CreateParams
-        {
-            get
+            catch
             {
-                // - добавим стиль WS_EX_COMPOSITED для формы
-                CreateParams handleParam = base.CreateParams;
-                handleParam.ExStyle |= 0x02000000;   // WS_EX_COMPOSITED       
-                return handleParam;
-            }
-        }
-
-        // ==================================== Открытие меню от иконки в трее
-        private void OpenTrayMenu()
-        {
-            // - активируем окно меню 
-            SetForegroundWindow(new HandleRef(this, this.Handle));
-            MainMenuStrip.Show(this, this.PointToClient(Cursor.Position));
-        }
-
-        // ==================================== Дополнительно убирает мерцания
-        void SetDoubleBuffered(Control c, bool value)
-        {
-            // - получим доступ к защищенному свойству DoubleBuffered класса Control через рефлексию
-            PropertyInfo pi = typeof(Control).GetProperty("DoubleBuffered",
-                BindingFlags.SetProperty | BindingFlags.Instance | BindingFlags.NonPublic);
-
-            // - если свойство найдено, установим его значение для данного контрола и обновим стили отрисовки
-            if (pi != null)
-            {
-                // - установим значение свойства DoubleBuffered для данного контрола
-                pi.SetValue(c, value, null);
-
-                // - получим доступ к защищенному методу SetStyle класса Control через рефлексию
-                MethodInfo mi = typeof(Control).GetMethod("SetStyle",
-                    BindingFlags.Instance | BindingFlags.InvokeMethod | BindingFlags.NonPublic);
-
-                // - установим стили отрисовки для данного контрола, включая двойную буферизацию и уменьшая мерцание
-                if (mi != null)
-                    mi.Invoke(c, new object[] {
-                        ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer, true });
-
-                // - получим доступ к защищенному методу UpdateStyles класса Control через рефлексию
-                mi = typeof(Control).GetMethod("UpdateStyles",
-                    BindingFlags.Instance | BindingFlags.InvokeMethod | BindingFlags.NonPublic);
-
-                // - вызовем метод UpdateStyles для данного контрола, чтобы применить изменения стилей отрисовки
-                if (mi != null) mi.Invoke(c, null);
+                try
+                {
+                    // - попытаемся открыть в браузере по умолчанию
+                    Process.Start(mAccount.Account.Url);
+                }
+                catch
+                {
+                    // - если не удалось открыть в браузере, вывести сообщение об ошибке
+                    CustomMsgBox.ShowAllert("Не удалось открыть аккаунт в браузере.");
+                }
             }
         }
 
-        // ==================================== Сворачивание и разворачивание окна программы в трей 
-        private void MinimazeAndMaximazeFormToTray()
+        // ================================= Изменить доступные элементы формы при авторизации 
+        private void RebuildElementsByAutorization()
         {
-            // - скроем основной контейнер формы
-            MainSplitContainer.Visible = false;
+            // - определить текущую панель настроек по флагу подчеркивания
+            bool isInfo = RightLinkInfo.Underline;
+            bool isAccount = RightLinkAccount.Underline;
+            bool isProgramm = RightLinkProgramm.Underline;
 
-            // - скроем окно программы 
-            Visible = !Visible;
-            ShowInTaskbar = !ShowInTaskbar;
-
-            // - найдем кнопку сворачивания в трей в меню, иначе - выход           
-            ToolStripItem[] ThisMenuItem = MainMenuStrip.Items.Find("Tray", true);
-            if (ThisMenuItem[0] == null) return;
-
-            // - получим панель с кнопкой сворачивания в трей
-            var tlPanel = ((ToolStripControlHost)ThisMenuItem[0]).Control;
-            if (tlPanel == null) return;
-
-            // - получим колонку панели
-            var tlColumn = (TableLayoutPanel)tlPanel.Controls[0];
-            if (tlColumn == null) return;
-
-            // - получим картинку в колонке панели
-            var tlpPicBox = (PictureBox)tlColumn.Controls[0];
-            if (tlpPicBox == null) return;
-
-            // - изменим картинку в колонке панели
-            string MenuIcon = Visible ? "MenuToTray48.png" : "MenuFromTray48.png";
-            tlpPicBox.Image = MainImageList.Images[MenuIcon];
-
-            // - получим текст в колонке панели
-            var tlpCapt = (ColorLabel)tlColumn.Controls[1];
-            if (tlpCapt == null) return;
-
-            // - изменим текст в колонке панели
-            tlpCapt.Text = Visible ? "Сврнуть окно настроек" : "Открыть окно настроек";
-
-            // - отобразим панель навигации
+            // - скрыть все панели с настройками
             ToolsTabPanel.Visible = true;
             PanelSetInfoAccount.Visible = true;
 
-            // - если свернули окно...
-            if (!Visible)
+            // - скрыть элементы авторизации
+            LoginErrorLabel.Visible = false;
+            PanelAutorization.Visible = false;
+
+            // - включение / выключение элементов, зависимых от режима администрирования            
+            LoginPassword.Visible = !Parameters.ParamWork.Settings.IsAdmin;
+            LoginInfoLabel.Visible = !Parameters.ParamWork.Settings.IsAdmin;
+            ToolsAnonLabel.Visible = !Parameters.ParamWork.Settings.IsAdmin;
+            // ------------  
+            UnloginLink.Visible = Parameters.ParamWork.Settings.IsAdmin;
+            LeftLinkAdd.Visible = Parameters.ParamWork.Settings.IsAdmin;
+            LeftLinkDel.Visible = Parameters.ParamWork.Settings.IsAdmin;
+            RightLinkProgramm.Visible = Parameters.ParamWork.Settings.IsAdmin;
+
+            // - отображение элементов, зависимых от наличия текущего аккаунта
+            RightLinkAccount.Visible = Parameters.ParamWork.Settings.IsAdmin
+                && (Parameters.ParamWork.Settings.CurrentAccount != null);
+
+            // - если режим администрирования не авторизирован
+            if (!Parameters.ParamWork.Settings.IsAdmin)
             {
-                // - выйдем из режима администратора, сбросим текущий аккаунт
-                Parameters.ParamWork.Settings.IsAdmin = false;
-                Parameters.ParamWork.Settings.CurrentAccount = null;
+                // - установим текст статуса на анонимный
+                StatusFormMainMode.Text = "Режим: анонимный";
 
-                // - перерисуем все элементы формы (без авторизации)
-                RebuildElementsByAutorization();
-                ShowAccountParameters(true);
+                // - скрыть все панели с настройками, установим статус
+                PanelSettingsAccount.Visible = false;
+                PanelSettingsProgramm.Visible = false;
 
-                // - сбросим цвет всех кнопок в левой панели аккаунтов
-                foreach (WorkAccount mAccount in Parameters.ParamWork.Accounts)
-                    mAccount.LeftButton.BtnPanel.BackColor = ColorTranslator.FromHtml("#00001a");
+                // - эуляция нажатия ссылки: информация об аккаунте
+                RightLink_LinkClicked(RightLinkInfo, null);
             }
 
-            // - отобразим основной контейнер формы
-            MainSplitContainer.Visible = true;
+            // - иначе: режим администрирования авторизирован
+            else
+            {
+                // - установим текст статуса на администрироание
+                StatusFormMainMode.Text = "Режим: администратор";
+
+                //  - если аккаунт выбран - эмуляция нажатия ссылки: настройуи аккаунта
+                if (Parameters.ParamWork.Settings.CurrentAccount != null) RightLink_LinkClicked(RightLinkAccount, null);
+                // - иначе если доступно: эмуляция нажатия ссылки: программа
+                else if (!isInfo || !RightLinkProgramm.Visible) RightLink_LinkClicked(RightLinkProgramm, null);
+                // - иначе: эмуляция нажатия ссылки: информация об аккаунте
+                else RightLink_LinkClicked(RightLinkInfo, null);
+            }
         }
 
+        // ==================================== Установка параметров выбранного аккаунта
+        private void ShowAccountParameters(bool ErrorClear)
+        {
+            // - если указан флаг очистки ошибок — очистить сообщение об ошибке
+            if (ErrorClear) ErrorMessageClear();
+
+            // - определить, выбран ли текущий аккаунт
+            bool isAccount = Parameters.ParamWork.Settings.CurrentAccount != null;
+
+            // - если текущий аккаунт выбран
+            if (isAccount)
+            {
+                // - обновить подпись аккаунта в интерфейсе (логин)
+                InfoAccount.Text = "Аккаунт: " + Parameters.ParamWork.Settings.CurrentAccount.Account.Login;
+                // - обновить информацию о количестве непрочитанных писем
+                InfoMessages.Text = "Всего непрочитанных писем: " + Parameters.ParamWork.Settings.CurrentAccount.Count.ToString();
+
+                // - если проверка почты когда-либо выполнялась — показать время последней проверки,
+                // --- иначе показать сообщение, что проверка не производилась
+                if (Parameters.ParamWork.Settings.CurrentAccount.LastCheck == DateTime.MinValue)
+                    InfoLastCheck.Text = "Проверка почты аккаунта не производилась...";
+                else InfoLastCheck.Text = "Последняя провека почты аккаунта: "
+                    + Parameters.ParamWork.Settings.CurrentAccount.LastCheck.ToString();
+
+                // - если для аккаунта есть флаг ошибки — показать текст ошибки в окне сообщений
+                if (Parameters.ParamWork.Settings.CurrentAccount.IsError)
+                    ErrorMessageShow(Parameters.ParamWork.Settings.CurrentAccount.ErrorText);
+            }
+
+            // - оначе: аккаунт не выбран — вывести соответствующий текст
+            else InfoAccount.Text = "Аккаунт не выбран...";
+
+            // - показать/скрыть элементы с информацией о сообщениях и времени последней проверки
+            InfoMessages.Visible = isAccount;
+            InfoLastCheck.Visible = isAccount;
+            LeftLinkDel.Links[0].Enabled = isAccount;
+
+            // - обновить доступность и вид элементов интерфейса в зависимости от авторизации
+            RebuildElementsByAutorization();
+        }
+
+        // ================================= Загрузить настройки программы из файла настроек 
+        private void LoadParametersFromFile()
+        {
+            // - создать и загрузить параметры программы из файла настроек
+            Parameters = new ParametersMain();
+            bool LoadRes = Parameters.LoadSettings();
+
+            // - обновить элементы меню и данных текущего аккаунта
+            RebuildElementsByParameters();
+            UpdateParametersPanel();
+
+            // - если загрузка не удалась — вывести сообщение об ошибке
+            if (!LoadRes) ErrorMessageShow(Parameters.ParamWork.Settings.ErrorText);
+        }
+
+        // ==================================== Установка ToolTip для кнопок формы
+        private void SetStartToolTips()
+        {
+            // - tooltip для кнопки сворачивания в трей
+            ToolTip tButtonFormHeaderTray = new ToolTip();
+            tButtonFormHeaderTray.SetToolTip(ButtonFormHeaderTray, "Свернуть в трей");
+
+            // - tooltip для кнопки открытия главного меню
+            ToolTip tButtonFormHeaderMenu = new ToolTip();
+            tButtonFormHeaderMenu.SetToolTip(ButtonFormHeaderMenu, "Главное меню");
+
+            // - tooltip для кнопки авторизации в режим администрирования
+            ToolTip tButtonFormHeaderAdmin = new ToolTip();
+            tButtonFormHeaderAdmin.SetToolTip(ButtonFormHeaderAdmin, "Режим администрирования");
+
+            // - tooltip для кнопки сохранения настроек
+            ToolTip tButtonFormHeaderSave = new ToolTip();
+            tButtonFormHeaderAdmin.SetToolTip(ButtonFormHeaderSave, "Сохранить настройки");
+
+            // - tooltip для кнопки очистки сообщения об ошибке
+            ToolTip tButtonErrorClear = new ToolTip();
+            tButtonErrorClear.SetToolTip(ButtonErrorClear, "Очистить сообщение об ошибке");
+
+            // - tooltip для кнопки копирования сообщения об ошибке
+            ToolTip tButtonErrorCopy = new ToolTip();
+            tButtonErrorCopy.SetToolTip(ButtonErrorCopy, "Скопировать сообщение об ошибке");
+        }
+
+        // ==================================== Установка параметров элементов по умолчанию
+        private void SetStartParameters()
+        {
+            // - снять выделение ссылок настроек
+            RightLinkInfo.Underline = true;
+            RightLinkInfo.LinkColor = Color.WhiteSmoke;
+            // ------------
+            RightLinkAccount.Underline = false;
+            RightLinkProgramm.Underline = false;
+
+            // - установить стили кнопок заголовка формы (трей)
+            ButtonFormHeaderTray.FlatAppearance.BorderSize = 0;
+            ButtonFormHeaderTray.FlatAppearance.MouseDownBackColor = ColorTranslator.FromHtml("#006");
+            ButtonFormHeaderTray.FlatAppearance.MouseOverBackColor = ColorTranslator.FromHtml("#007");
+            // - главное меню
+            ButtonFormHeaderMenu.FlatAppearance.BorderSize = 0;
+            ButtonFormHeaderMenu.FlatAppearance.MouseDownBackColor = ColorTranslator.FromHtml("#006");
+            ButtonFormHeaderMenu.FlatAppearance.MouseOverBackColor = ColorTranslator.FromHtml("#007");
+            // - режим администрирования
+            ButtonFormHeaderAdmin.FlatAppearance.BorderSize = 0;
+            ButtonFormHeaderAdmin.FlatAppearance.MouseDownBackColor = ColorTranslator.FromHtml("#006");
+            ButtonFormHeaderAdmin.FlatAppearance.MouseOverBackColor = ColorTranslator.FromHtml("#007");
+            // - сохранить настройки
+            ButtonFormHeaderSave.FlatAppearance.BorderSize = 0;
+            ButtonFormHeaderSave.FlatAppearance.MouseDownBackColor = ColorTranslator.FromHtml("#006");
+            ButtonFormHeaderSave.FlatAppearance.MouseOverBackColor = ColorTranslator.FromHtml("#007");
+
+            // - установить иконки кнопок заголовка формы
+            icTrayEmpty = Icon.FromHandle(((Bitmap)MainImageList.Images["MailNotifier48.png"]).GetHicon());
+            icTrayOpen = Icon.FromHandle(((Bitmap)MainImageList.Images["TrayOpen48.png"]).GetHicon());
+            icTrayClose = Icon.FromHandle(((Bitmap)MainImageList.Images["TrayClosed48.png"]).GetHicon());
+            icTrayUpdate = Icon.FromHandle(((Bitmap)MainImageList.Images["TrayUpdate48.png"]).GetHicon());
+
+            // - установить иконку в трее
+            NotifyIconMain.Icon = icTrayEmpty;
+        }
+
+        // ------------
+        #endregion
+
+        
+        // ==========================================================================
+        #region =================    Функции проверки почты     ======================
+        /* ------------ */
         // ==================================== Установить текст tooltyp в трее > 64 символов
         private void UpdateAllAccountsPostProcessing()
         {
@@ -880,365 +1104,23 @@ namespace MailNotifier
 
 
         // ==========================================================================
-        #region ============== Динамическое изменение элементов формы  ==============
-        /* ------------ */
-        // ==================================== Создание обязательных кнпок меню
-        private void CreateFixedMenuitems()
-        {
-            // - верхний разделитель
-            MainMenuStrip.Items.Add("-");
-
-            // - кнопка обновить почту
-            ButtonPanel CurrentItemButton = new ButtonPanel(null, "Update")
-            {
-                IsMenu = true,
-                IsCount = false,
-                IconName = "TrayUpdate48.png",
-                Caption = "Перечитать почту",
-            };
-            // ------------
-            CurrentItemButton.Iinitialize();
-            // ------------ панель на кнопке
-            PanelMenuItem CurrentItem = new PanelMenuItem(CurrentItemButton, new Size(260, 28))
-            {
-                Margin = new Padding(-6, 0, 9, 0),
-                Dock = DockStyle.Fill
-            };
-            // ------------ добавление пунта меню
-            MainMenuStrip.Items.Add(CurrentItem);
-
-            // - кнопка свернуть/развернуть форму настроек
-            CurrentItemButton = new ButtonPanel(null, "Tray")
-            {
-                IsMenu = true,
-                IsCount = false,
-                IconName = "MenuToTray48.png",
-                Caption = "Сврнуть окно настроек",
-            };
-            CurrentItemButton.Iinitialize();
-            // ------------ панель на кнопке
-            CurrentItem = new PanelMenuItem(CurrentItemButton, new Size(260, 28))
-            {
-                Margin = new Padding(-6, 0, 9, 0),
-                Dock = DockStyle.Fill,
-                Name = "Tray"
-            };
-            // ------------ добавление пунта меню
-            MainMenuStrip.Items.Add(CurrentItem);
-
-            // - средний разделитель
-            MainMenuStrip.Items.Add("-");
-
-            // - кнопка выхода
-            ButtonPanel CurrentItemButton1 = new ButtonPanel(null, "Exit")
-            {
-                IsMenu = true,
-                IsCount = false,
-                IconName = "MunuExit48.png",
-                Caption = "Выйти из программы",
-            };
-            // ------------
-            CurrentItemButton1.Iinitialize();
-            // - панель на кнопке
-            CurrentItem = new PanelMenuItem(CurrentItemButton1, new Size(260, 28))
-            {
-                Margin = new Padding(-6, 0, 9, 0),
-                Dock = DockStyle.Fill
-            };
-            // ------------ добавление пунта меню
-            MainMenuStrip.Items.Add(CurrentItem);
-
-            // - расчет высоты меню
-            MainMenuStrip.Height = 102 + 28 * Parameters.ParamWork.Accounts.Count;
-        }
-
-        // ================================= Создание кнопки и меню Аккаутна
-        private void CreateAccountsLinks(WorkAccount mAccount)
-        {
-            // - создание панели - контейнера
-            Panel BtnContainer = new Panel
-            {
-                Name = "Cnt_" + mAccount.Name,
-                Dock = DockStyle.Top,
-                Height = 42
-            };
-
-            // - создание панели-кнопки для левой панели
-            ButtonPanel BtnElement = new ButtonPanel(mAccount)
-            {
-                IsMenu = false,
-                Count = mAccount.Count,
-                IsAlert = mAccount.IsError,
-                IconColor = mAccount.Account.Color,
-            };
-            BtnElement.Iinitialize();
-
-            // - добавление панели-кнопки в контейнер
-            BtnContainer.Controls.Add(BtnElement.BtnPanel);
-            MainLeftPanel.Controls.Add(BtnContainer);
-            MainLeftPanel.Controls.SetChildIndex(BtnContainer, 0);
-
-            // ------------ ------------
-            // - ривязка событий для поддержки Drag-and-Drop (только в режиме админа)
-            BtnElement.BtnPanel.MouseMove += AccountPanel_MouseMove; ////!!!! - ??????
-            BtnContainer.MouseMove += AccountPanel_MouseUp;
-            // ------------
-            BtnElement.BtnPanel.MouseDown += AccountPanel_MouseDown;
-            BtnElement.BtnPanel.MouseUp += AccountPanel_MouseUp;
-            BtnContainer.MouseUp += AccountPanel_MouseUp;
-
-            // ------------ ------------
-            // - добавление кнопки в левую панель
-            mAccount.LeftButton = BtnElement;
-
-            // - создание панели-кнопки для меню
-            ButtonPanel MenuElement = new ButtonPanel(mAccount)
-            {
-                IsMenu = true,
-                Count = mAccount.Count,
-                IsAlert = mAccount.IsError,
-                IconColor =mAccount.Account.Color,
-            };
-            MenuElement.Iinitialize();
-
-            // - параметры пункта меню
-            PanelMenuItem CurrentItem = new PanelMenuItem(MenuElement, new Size(260, 28))
-            {
-                Margin = new Padding(-6, 0, 9, 0),
-                Dock = DockStyle.Fill
-            };
-
-            // - добавление пункта в меню
-            MainMenuStrip.Items.Add(CurrentItem);
-
-            // - моъранение ссылки напункт меню в аккаунт
-            mAccount.MenuPanel = MenuElement;
-        }
-
-        // ================================= Пересоздать меню при Изменении параметров
-        private void RebuildElementsByParameters()
-        {
-            // - очистка меню и левой панели
-            MainLeftPanel.Controls.Clear();
-            MainMenuStrip.Items.Clear();
-            TimerTrayMail.Stop();
-            
-            // - создадим меню для каждого настроенного аккаунта          
-            foreach (var MyAccount in Parameters.ParamWork.Accounts)
-                CreateAccountsLinks(MyAccount);
-            
-            // - создадим фиксированные пункты меню
-            CreateFixedMenuitems();
-            TimerTrayMail_start();
-            
-            // - отображение счетчика настроенных аккаунтов
-            ToolsAnonLabel.Text = "Всего настроено аккаунтов:  " +
-                Parameters.ParamWork.Accounts.Count.ToString();
-        }
-
-        // ==================================== Открыть выбранный аккаунт в браузере
-        private void OpenAccountInBrowser(WorkAccount mAccount)
-        {
-            try {
-                // - попытаемся открыть в браузере из настроек приложения
-                Process.Start(Parameters.ParamWork.Settings.SavedSettings.Browser, mAccount.Account.Url); }
-            catch {
-                try {
-                    // - попытаемся открыть в браузере по умолчанию
-                    Process.Start(mAccount.Account.Url); }
-                catch {
-                    // - если не удалось открыть в браузере, вывести сообщение об ошибке
-                    CustomMsgBox.ShowAllert("Не удалось открыть аккаунт в браузере.");
-                }
-            }
-        }
-
-        // ================================= Изменить доступные элементы формы при авторизации 
-        private void RebuildElementsByAutorization()
-        {
-            // - определить текущую панель настроек по флагу подчеркивания
-            bool isInfo = RightLinkInfo.Underline;
-            bool isAccount = RightLinkAccount.Underline;
-            bool isProgramm = RightLinkProgramm.Underline;
-            
-            // - скрыть все панели с настройками
-            ToolsTabPanel.Visible = true;            
-            PanelSetInfoAccount.Visible = true;
-            
-            // - скрыть элементы авторизации
-            LoginErrorLabel.Visible = false;
-            PanelAutorization.Visible = false;
-            
-            // - включение / выключение элементов, зависимых от режима администрирования            
-            LoginPassword.Visible = ! Parameters.ParamWork.Settings.IsAdmin;
-            LoginInfoLabel.Visible = ! Parameters.ParamWork.Settings.IsAdmin;            
-            ToolsAnonLabel.Visible = ! Parameters.ParamWork.Settings.IsAdmin;
-            // ------------  
-            UnloginLink.Visible =  Parameters.ParamWork.Settings.IsAdmin;          
-            LeftLinkAdd.Visible =  Parameters.ParamWork.Settings.IsAdmin;
-            LeftLinkDel.Visible =  Parameters.ParamWork.Settings.IsAdmin;
-            RightLinkProgramm.Visible =  Parameters.ParamWork.Settings.IsAdmin;
-
-            // - отображение элементов, зависимых от наличия текущего аккаунта
-            RightLinkAccount.Visible =  Parameters.ParamWork.Settings.IsAdmin 
-                && ( Parameters.ParamWork.Settings.CurrentAccount != null);
-            
-            // - если режим администрирования не авторизирован
-            if (!Parameters.ParamWork.Settings.IsAdmin)
-            {
-                // - установим текст статуса на анонимный
-                StatusFormMainMode.Text = "Режим: анонимный";
-                
-                // - скрыть все панели с настройками, установим статус
-                PanelSettingsAccount.Visible = false;
-                PanelSettingsProgramm.Visible = false;                
-                
-                // - эуляция нажатия ссылки: информация об аккаунте
-                RightLink_LinkClicked(RightLinkInfo, null);
-            }
-            
-            // - иначе: режим администрирования авторизирован
-            else {
-                // - установим текст статуса на администрироание
-                StatusFormMainMode.Text = "Режим: администратор";
-                
-                //  - если аккаунт выбран - эмуляция нажатия ссылки: настройуи аккаунта
-                if (Parameters.ParamWork.Settings.CurrentAccount != null)  RightLink_LinkClicked(RightLinkAccount, null);
-                // - иначе если доступно: эмуляция нажатия ссылки: программа
-                else if (!isInfo || !RightLinkProgramm.Visible) RightLink_LinkClicked(RightLinkProgramm, null);
-                // - иначе: эмуляция нажатия ссылки: информация об аккаунте
-                else RightLink_LinkClicked(RightLinkInfo, null);
-            }
-        }
-
-        // ==================================== Установка параметров выбранного аккаунта
-        private void ShowAccountParameters(bool ErrorClear)
-        {
-            // - если указан флаг очистки ошибок — очистить сообщение об ошибке
-            if (ErrorClear) ErrorMessageClear();
-
-            // - определить, выбран ли текущий аккаунт
-            bool isAccount =  Parameters.ParamWork.Settings.CurrentAccount != null;
-
-            // - если текущий аккаунт выбран
-            if (isAccount)
-            {
-                // - обновить подпись аккаунта в интерфейсе (логин)
-                InfoAccount.Text = "Аккаунт: " +  Parameters.ParamWork.Settings.CurrentAccount.Account.Login;
-                // - обновить информацию о количестве непрочитанных писем
-                InfoMessages.Text = "Всего непрочитанных писем: " +  Parameters.ParamWork.Settings.CurrentAccount.Count.ToString();
-
-                // - если проверка почты когда-либо выполнялась — показать время последней проверки,
-                // --- иначе показать сообщение, что проверка не производилась
-                if ( Parameters.ParamWork.Settings.CurrentAccount.LastCheck == DateTime.MinValue)
-                    InfoLastCheck.Text = "Проверка почты аккаунта не производилась...";
-                else InfoLastCheck.Text = "Последняя провека почты аккаунта: "
-                    +  Parameters.ParamWork.Settings.CurrentAccount.LastCheck.ToString();
-
-                // - если для аккаунта есть флаг ошибки — показать текст ошибки в окне сообщений
-                if ( Parameters.ParamWork.Settings.CurrentAccount.IsError)
-                    ErrorMessageShow( Parameters.ParamWork.Settings.CurrentAccount.ErrorText);
-            }
-
-            // - оначе: аккаунт не выбран — вывести соответствующий текст
-            else InfoAccount.Text = "Аккаунт не выбран...";
-
-            // - показать/скрыть элементы с информацией о сообщениях и времени последней проверки
-            InfoMessages.Visible = isAccount;
-            InfoLastCheck.Visible = isAccount;
-            LeftLinkDel.Links[0].Enabled = isAccount;
-
-            // - обновить доступность и вид элементов интерфейса в зависимости от авторизации
-            RebuildElementsByAutorization();
-        }
-
-        // ================================= Загрузить настройки программы из файла настроек 
-        private void LoadParametersFromFile()
-        {
-            // - создать и загрузить параметры программы из файла настроек
-            Parameters = new ParametersMain();
-            bool LoadRes = Parameters.LoadSettings();
-            
-            // - обновить элементы меню и данных текущего аккаунта
-            RebuildElementsByParameters();
-            UpdateParametersPanel();
-            
-            // - если загрузка не удалась — вывести сообщение об ошибке
-            if (!LoadRes) ErrorMessageShow( Parameters.ParamWork.Settings.ErrorText);
-        }
-
-        // ==================================== Установка ToolTip для кнопок формы
-        private void SetStartToolTips()
-        {
-            // - tooltip для кнопки сворачивания в трей
-            ToolTip tButtonFormHeaderTray = new ToolTip();
-            tButtonFormHeaderTray.SetToolTip(ButtonFormHeaderTray, "Свернуть в трей");
-            
-            // - tooltip для кнопки открытия главного меню
-            ToolTip tButtonFormHeaderMenu = new ToolTip();
-            tButtonFormHeaderMenu.SetToolTip(ButtonFormHeaderMenu, "Главное меню");
-            
-            // - tooltip для кнопки авторизации в режим администрирования
-            ToolTip tButtonFormHeaderAdmin = new ToolTip();
-            tButtonFormHeaderAdmin.SetToolTip(ButtonFormHeaderAdmin, "Режим администрирования");
-            
-            // - tooltip для кнопки сохранения настроек
-            ToolTip tButtonFormHeaderSave = new ToolTip();
-            tButtonFormHeaderAdmin.SetToolTip(ButtonFormHeaderSave, "Сохранить настройки");
-            
-            // - tooltip для кнопки очистки сообщения об ошибке
-            ToolTip tButtonErrorClear = new ToolTip();
-            tButtonErrorClear.SetToolTip(ButtonErrorClear, "Очистить сообщение об ошибке");
-            
-            // - tooltip для кнопки копирования сообщения об ошибке
-            ToolTip tButtonErrorCopy = new ToolTip();
-            tButtonErrorCopy.SetToolTip(ButtonErrorCopy, "Скопировать сообщение об ошибке");
-        }
-        
-        // ==================================== Установка параметров элементов по умолчанию
-        private void SetStartParameters()
-        {   
-            // - снять выделение ссылок настроек
-            RightLinkInfo.Underline = true;
-            RightLinkInfo.LinkColor = Color.WhiteSmoke;
-            // ------------
-            RightLinkAccount.Underline = false;
-            RightLinkProgramm.Underline = false;
-            
-            // - установить стили кнопок заголовка формы (трей)
-            ButtonFormHeaderTray.FlatAppearance.BorderSize = 0;
-            ButtonFormHeaderTray.FlatAppearance.MouseDownBackColor = ColorTranslator.FromHtml("#006");
-            ButtonFormHeaderTray.FlatAppearance.MouseOverBackColor = ColorTranslator.FromHtml("#007");   
-            // - главное меню
-            ButtonFormHeaderMenu.FlatAppearance.BorderSize = 0;
-            ButtonFormHeaderMenu.FlatAppearance.MouseDownBackColor = ColorTranslator.FromHtml("#006");
-            ButtonFormHeaderMenu.FlatAppearance.MouseOverBackColor = ColorTranslator.FromHtml("#007");           
-            // - режим администрирования
-            ButtonFormHeaderAdmin.FlatAppearance.BorderSize = 0;
-            ButtonFormHeaderAdmin.FlatAppearance.MouseDownBackColor = ColorTranslator.FromHtml("#006");
-            ButtonFormHeaderAdmin.FlatAppearance.MouseOverBackColor = ColorTranslator.FromHtml("#007");            
-            // - сохранить настройки
-            ButtonFormHeaderSave.FlatAppearance.BorderSize = 0;
-            ButtonFormHeaderSave.FlatAppearance.MouseDownBackColor = ColorTranslator.FromHtml("#006");
-            ButtonFormHeaderSave.FlatAppearance.MouseOverBackColor = ColorTranslator.FromHtml("#007");
-           
-            // - установить иконки кнопок заголовка формы
-            icTrayEmpty = Icon.FromHandle(((Bitmap)MainImageList.Images["MailNotifier48.png"]).GetHicon());
-            icTrayOpen = Icon.FromHandle(((Bitmap)MainImageList.Images["TrayOpen48.png"]).GetHicon());
-            icTrayClose = Icon.FromHandle(((Bitmap)MainImageList.Images["TrayClosed48.png"]).GetHicon());
-            icTrayUpdate = Icon.FromHandle(((Bitmap)MainImageList.Images["TrayUpdate48.png"]).GetHicon());
-            
-            // - установить иконку в трее
-            NotifyIconMain.Icon = icTrayEmpty;
-        }
-
-        // ------------
-        #endregion
-
-
-        // ==========================================================================
         #region ===================       События TrayIcon        ===================
-        /* ------------ */       
+        /* ------------ */
+
+        // ---- для скрытия иконки меню на панели задач из dll
+        [DllImport("User32.dll", ExactSpelling = true, CharSet = CharSet.Auto)]
+
+        // ---- функция для установки активности окна
+        public static extern bool SetForegroundWindow(HandleRef hWnd);
+        /* ------------ */
+
+        // ==================================== Открытие меню от иконки в трее
+        private void OpenTrayMenu()
+        {
+            // - активируем окно меню 
+            SetForegroundWindow(new HandleRef(this, this.Handle));
+            MainMenuStrip.Show(this, this.PointToClient(Cursor.Position));
+        }
         // ==================================== Срабатывание таймера мигающей иконки при наличии сообщений
         private void TimerTrayShow_Tick(object sender, EventArgs e) 
         {
@@ -1404,69 +1286,12 @@ namespace MailNotifier
             ButtonFormHeaderSave.Visible = true;
         }
 
-        // ==================================== Обработчик изменения свойств аккаунта в PropertyGrid
-        private void PropertyGridAccount_PropertyValueChanged(object s, PropertyValueChangedEventArgs e)
-        {
-            try
-            {
-                // - обработать только изменение свойства Login
-                if (e.ChangedItem != null && e.ChangedItem.PropertyDescriptor != null &&
-                    e.ChangedItem.PropertyDescriptor.Name == "Login")
-                {
-                    // - создание нового имени из измененного login аккаунта
-                    string Newvalue = e.ChangedItem.Value?.ToString() ?? e.OldValue?.ToString();
-                    string NewName = Newvalue.Replace("@", "").Replace(".", "");
-
-                    // - получить текущий аккаунт
-                    var curAccount = Parameters.ParamWork.Settings.CurrentAccount;
-
-                    // - если аккаунт найден и он не пустой
-                    if (curAccount != null && curAccount.Account != null)
-                    {
-                        // - обновить рабочее имя аккаунта и логин в сохраняемых параметрах
-                        curAccount.Name = NewName;
-
-                        // - обновить название и подпись левой кнопки, если она инициализирована
-                        if (curAccount.LeftButton != null && curAccount.LeftButton.BtnPanel != null)
-                        {
-                            curAccount.LeftButton.BtnPanel.Name = NewName;
-                            if (curAccount.LeftButton.BtnPanel.Controls.ContainsKey("P_Caption"))
-                                curAccount.LeftButton.BtnPanel.Controls["P_Caption"].Text = Newvalue;
-
-                            // - найти и обновить название кнопки в классе Account
-                            var bpField = curAccount.LeftButton.GetType().GetField("<Name>k__BackingField"
-                                , System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
-                            if (bpField != null) bpField.SetValue(curAccount.LeftButton, NewName);
-                        }
-
-                        // - найти и обновить пункт меню (если есть)
-                        if (curAccount.MenuPanel != null && curAccount.MenuPanel.BtnPanel != null)
-                        {
-                            curAccount.MenuPanel.BtnPanel.Name = NewName;
-                            if (curAccount.MenuPanel.BtnPanel.Controls.ContainsKey("P_Caption"))
-                                curAccount.MenuPanel.BtnPanel.Controls["P_Caption"].Text = Newvalue;
-                        }
-
-                        // - обновить отображение правой панели (информация об аккаунте)
-                        ShowAccountParameters(true);
-
-                        // - пометить форму как изменённую и показать кнопку сохранения
-                        CaptionFormMain.Text = "Mail Notifier *";
-                        ButtonFormHeaderSave.Visible = true;
-                    }
-                }
-            }
-
-            // - обработка исключений
-            catch { }
-        }
-
         // ------------
         #endregion
 
         
         // ==========================================================================
-        #region =================  Drag-and-Drop панелей аккаунтов  ================
+        #region =================   Drag-and-Drop панелей аккаунтов   ================
         /* ------------ */
         // ==================================== Начало: создание прокси и подготовка к перемещению
         private void AccountPanel_MouseDown(object sender, MouseEventArgs e)
@@ -1681,7 +1506,235 @@ namespace MailNotifier
 
         // ------------
         #endregion
-    }
-    // ------------ End of FormMain class
-}
+      
 
+        // ==========================================================================
+        #region ===============  Функции панелей настройки Editors   ================
+        /* ------------ */
+        // ==================================== Получение размера периода в миллисекундах
+        public int PeriodToMilliseconds(Periods Into)
+        {
+            return int.Parse(Into.ToString().Replace("m", ""));
+        }
+
+        // ==================================== Получение значения периода из миллисекунд
+        public Periods MillisecondsToPeriod(int Into)
+        {
+            return (Periods)Enum.Parse(typeof(Periods), Into.ToString());
+        }
+
+        // ==================================== Обновление панели аккаунтов
+        private void UpdateAccuuntPanel()
+        {
+            // - если аккаунт не выбран, очистим панель и выйдем
+            if (Parameters.ParamWork.Settings.CurrentAccount == null) return;
+
+            // - если аккаунт выбран, отобразим его настройки
+            PropertyGridAccount.SelectedObject = Parameters.ParamWork.Settings.CurrentAccount.Account;
+            PropertyGridAccount.ViewForeColor = Color.Gainsboro;
+            PropertyGridAccount.ForeColor = Color.Gainsboro;
+        }
+
+        // ==================================== Обновление панели настроек
+        private void UpdateParametersPanel()
+        {
+            // - выделим текущие настройки программы
+            PropertyGridProgramm.SelectedObject = Parameters.ParamWork.Settings.SavedSettings;
+            PropertyGridProgramm.ViewForeColor = Color.Gainsboro;
+            PropertyGridProgramm.ForeColor = Color.Gainsboro;
+        }
+
+        // ==================================== Обработчик изменения свойств аккаунта в PropertyGrid
+        private void PropertyGridAccount_PropertyValueChanged(object s, PropertyValueChangedEventArgs e)
+        {
+            try
+            {
+                // - определить, было ли изменение свойства
+                bool isChanged = (e.ChangedItem != null && e.ChangedItem.PropertyDescriptor != null);
+
+                // - обработать только изменение свойства Login
+                if (isChanged && e.ChangedItem.PropertyDescriptor.Name == "Login")
+                {
+                    // - получить текущий аккаунт
+                    var curAccount = Parameters.ParamWork.Settings.CurrentAccount;
+
+                    // - если аккаунт найден и он не пустой
+                    if (curAccount != null && curAccount.Account != null)
+                    {
+                        // - создание нового имени из измененного login аккаунта
+                        string Newvalue = e.ChangedItem.Value?.ToString() ?? e.OldValue?.ToString();
+                        string NewName = Newvalue.Replace("@", "").Replace(".", "");
+
+                        // - обновить рабочее имя аккаунта и логин в сохраняемых параметрах
+                        curAccount.Name = NewName;
+
+                        // - обновить название и подпись левой кнопки, если она инициализирована
+                        if (curAccount.LeftButton != null && curAccount.LeftButton.BtnPanel != null)
+                        {
+                            curAccount.LeftButton.BtnPanel.Name = NewName;
+                            if (curAccount.LeftButton.BtnPanel.Controls.ContainsKey("P_Caption"))
+                                curAccount.LeftButton.BtnPanel.Controls["P_Caption"].Text = Newvalue;
+
+                            // - найти и обновить название кнопки в классе Account
+                            var bpField = curAccount.LeftButton.GetType().GetField("<Name>k__BackingField"
+                                , System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+                            if (bpField != null) bpField.SetValue(curAccount.LeftButton, NewName);
+                        }
+
+
+                        // - найти и обновить пункт меню (если есть)
+                        if (curAccount.MenuPanel != null && curAccount.MenuPanel.BtnPanel != null)
+                        {
+                            curAccount.MenuPanel.BtnPanel.Name = NewName;
+                            if (curAccount.MenuPanel.BtnPanel.Controls.ContainsKey("P_Caption"))
+                                curAccount.MenuPanel.BtnPanel.Controls["P_Caption"].Text = Newvalue;
+                        }
+
+                        // - обновить отображение правой панели (информация об аккаунте)
+                        ShowAccountParameters(true);
+                    }
+                }
+
+                // - если было изменение любого свойства...
+                if (isChanged)
+                {
+                    // - пометить форму как изменённую и показать кнопку сохранения
+                    CaptionFormMain.Text = "Mail Notifier *";
+                    ButtonFormHeaderSave.Visible = true;
+                }
+            }
+
+            // - обработка исключений
+            catch (Exception ex)
+            {
+                // - вывести сообщение об ошибке в случае исключения
+                CustomMsgBox.ShowAllert("Ошибка при изменении параметров аккаунта." + ex.Message);
+            }
+        }
+
+        // ------------
+        #endregion
+
+
+        // ==========================================================================
+        #region ===============  Функции внешнего вызова из классов  ================
+        /* ------------*/
+        // ==================================== Показать сообщение об ошибке
+        private void ErrorMessageShow(String ErrorMessage)
+        {
+            // - если нет ошибки, очистим панель и выйдем
+            InfoError.Visible = true;
+            ButtonErrorCopy.Visible = true;
+            ButtonErrorClear.Visible = true;
+
+            // - разлочим кнопку очистки ошибки только, если ошибка не критическая
+            ButtonErrorClear.Enabled = !Parameters.ParamWork.IsCriticalError;
+
+            // - отобразим текст ошибкина панели ошибок
+            InfoError.Text = ErrorMessage;
+        }
+
+        // ==================================== Очистить сообщение об ошибке
+        private void ErrorMessageClear()
+        {
+            // - очистим панель ошибок
+            InfoError.Visible = false;
+            ButtonErrorCopy.Visible = false;
+            ButtonErrorClear.Visible = false;
+
+            // - очистим текст ошибки на панели ошибок
+            InfoError.Text = "";
+        }
+
+        // ==================================== Закрыть главное меню
+        private void MainMenuStripClose()
+        {
+            MainMenuStrip.Close();
+        }
+
+        // ==================================== Обработка клика по панели кнопок
+        public void BtnPanelClick(ButtonPanel sender, EventArgs e)
+        {
+            // - закрыть главное меню, если клик был из него 
+            MainMenuStripClose();
+
+            // - определить действие по имени кнопки
+            switch (sender.Name)
+            {
+                // - если нажата кнопка выхода, проверим наличие несохраненных изменений
+                case "Exit":
+                    // - если есть несохраненные изменения, спросим, что делать
+                    if (CaptionFormMain.Text.EndsWith("*"))
+                    {
+                        DialogResult DlgRes = CustomMsgBox.ShowQuestion();
+
+                        // - если пользователь отменил действие, не закрываем программу
+                        if (DlgRes == DialogResult.Cancel) break;
+
+                        // - если пользователь согласился, сэмулируем сохранение изменения
+                        else if (DlgRes == DialogResult.Yes) ButtonFormHeaderSave_Click(sender, e);
+                    }
+
+                    // - закрыть программу
+                    FormMain.Form.Close();
+                    break;
+
+                // - если нажата кнопка сворачивания в трей, свернуть / развернуть окно
+                case "Tray":
+                    MinimazeAndMaximazeFormToTray();
+                    break;
+
+                // - если нажата кнопка обновления, перечитать почту во всех аккаунтах и обновить отображение
+                case "Update":
+                    UpdateAllAccountsPreProcessing();
+                    if (Parameters.ParamWork.Settings.CurrentAccount != null) ShowAccountParameters(true);
+                    break;
+
+                // - для остальных кнопок (кнопки аккаунтов в меню и на панели)
+                default:
+
+                    // - найти аккаунт, связанный с кнопкой, по имени
+                    WorkAccount mAccount = Parameters.ParamWork.Accounts.Find(item => item.Name == sender.Name);
+
+                    // - если клик был из меню, открыть аккаунт в браузере, 
+                    if (sender.IsMenu)
+                    {
+                        if (mAccount != null) OpenAccountInBrowser(mAccount);
+                        return;
+                    }
+
+                    //  - иначе (клик по левой панели) отобразить настройки аккаунта
+                    else
+                    {
+                        // - если аккаунт уже выбран, сбросить цвет его кнопки на панели и в меню
+                        if (Parameters.ParamWork.Settings.CurrentAccount != null)
+                        {
+                            WorkAccount CurrentAccount = Parameters.ParamWork.Settings.CurrentAccount;
+                            CurrentAccount.LeftButton.BtnPanel.Controls["P_Caption"].ForeColor = Color.Gainsboro;
+                            CurrentAccount.LeftButton.BtnPanel.BackColor = ColorTranslator.FromHtml("#00001a");
+                        }
+
+                        // - установить цвет кнопки выбранного аккаунта на панели и в меню
+                        if (mAccount != null)
+                        {
+                            mAccount.LeftButton.BtnPanel.Controls["P_Caption"].ForeColor = Color.White;
+                            mAccount.LeftButton.BtnPanel.BackColor = ColorTranslator.FromHtml("#005");
+                        }
+
+                        // - выделить / снять  выделение аккаунта, отобразить изменения на панели настроек
+                        bool IsCurrent = Parameters.ParamWork.Settings.CurrentAccount == mAccount;
+                        Parameters.ParamWork.Settings.CurrentAccount = (IsCurrent) ? null : mAccount;
+                        ShowAccountParameters(true);
+                    }
+                    // ------------
+                    break;
+            }
+        }
+
+        // ------------
+        #endregion
+
+        // ------------ End of FormMain class
+    }
+
+}
