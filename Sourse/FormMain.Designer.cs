@@ -339,6 +339,7 @@ namespace MailNotifier
             // 
             this.LeftLinkAdd.ActiveLinkColor = System.Drawing.Color.WhiteSmoke;
             this.LeftLinkAdd.AutoSize = true;
+            this.LeftLinkAdd.DisabledLinkColor = System.Drawing.Color.Gray;
             this.LeftLinkAdd.Dock = System.Windows.Forms.DockStyle.Fill;
             this.LeftLinkAdd.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline;
             this.LeftLinkAdd.LinkColor = System.Drawing.Color.LightBlue;
@@ -351,6 +352,7 @@ namespace MailNotifier
             this.LeftLinkAdd.Text = "Добавить";
             this.LeftLinkAdd.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.LeftLinkAdd.UseMnemonic = false;
+            this.LeftLinkAdd.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.LeftLinkAdd_LinkClicked);
             this.LeftLinkAdd.MouseLeave += new System.EventHandler(this.Link_MouseLeave);
             this.LeftLinkAdd.MouseHover += new System.EventHandler(this.Link_MouseHover);
             // 
@@ -358,6 +360,7 @@ namespace MailNotifier
             // 
             this.LeftLinkDel.ActiveLinkColor = System.Drawing.Color.WhiteSmoke;
             this.LeftLinkDel.AutoSize = true;
+            this.LeftLinkDel.DisabledLinkColor = System.Drawing.Color.Gray;
             this.LeftLinkDel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.LeftLinkDel.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline;
             this.LeftLinkDel.LinkColor = System.Drawing.Color.LightBlue;
@@ -369,6 +372,7 @@ namespace MailNotifier
             this.LeftLinkDel.TabStop = true;
             this.LeftLinkDel.Text = "Удалить";
             this.LeftLinkDel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.LeftLinkDel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.LeftLinkDel_LinkClicked);
             this.LeftLinkDel.MouseLeave += new System.EventHandler(this.Link_MouseLeave);
             this.LeftLinkDel.MouseHover += new System.EventHandler(this.Link_MouseHover);
             // 
@@ -464,6 +468,7 @@ namespace MailNotifier
             // InfoMessages
             // 
             this.InfoMessages.AutoSize = true;
+            this.InfoMessages.ForeColor = System.Drawing.Color.Gainsboro;
             this.InfoMessages.Location = new System.Drawing.Point(6, 52);
             this.InfoMessages.Name = "InfoMessages";
             this.InfoMessages.Size = new System.Drawing.Size(206, 16);
@@ -576,6 +581,7 @@ namespace MailNotifier
             this.PropertyGridAccount.ViewBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(32)))));
             this.PropertyGridAccount.ViewBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(70)))));
             this.PropertyGridAccount.ViewForeColor = System.Drawing.Color.Gainsboro;
+            this.PropertyGridAccount.PropertyValueChanged += new System.Windows.Forms.PropertyValueChangedEventHandler(this.PropertyGridAccount_PropertyValueChanged);
             // 
             // PanelAutorization
             // 
@@ -764,6 +770,7 @@ namespace MailNotifier
             this.MainImageList.Images.SetKeyName(9, "MyInf.png");
             this.MainImageList.Images.SetKeyName(10, "MyErr.png");
             this.MainImageList.Images.SetKeyName(11, "Error-Close.png");
+            this.MainImageList.Images.SetKeyName(12, "");
             // 
             // MainContextMenu
             // 

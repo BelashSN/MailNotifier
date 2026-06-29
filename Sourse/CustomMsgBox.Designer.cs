@@ -30,26 +30,99 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CustomMsgBox));
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.colorLabel1 = new MailNotifier.ColorLabel(this.components);
-            this.colorLabel2 = new MailNotifier.ColorLabel(this.components);
+            this.pictureBoxQuest = new System.Windows.Forms.PictureBox();
             this.btnOk = new System.Windows.Forms.Button();
             this.btnNo = new System.Windows.Forms.Button();
             this.btnCansel = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.pictureBoxAllert = new System.Windows.Forms.PictureBox();
+            this.colorLabel1 = new MailNotifier.ColorLabel(this.components);
+            this.colorLabel2 = new MailNotifier.ColorLabel(this.components);
+            this.labelAllert = new System.Windows.Forms.Label();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxQuest)).BeginInit();
             this.panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxAllert)).BeginInit();
             this.SuspendLayout();
             // 
-            // pictureBox1
+            // pictureBoxQuest
             // 
-            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.Location = new System.Drawing.Point(12, 12);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(48, 46);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox1.TabIndex = 4;
-            this.pictureBox1.TabStop = false;
+            this.pictureBoxQuest.Image = ((System.Drawing.Image)(resources.GetObject("pictureBoxQuest.Image")));
+            this.pictureBoxQuest.Location = new System.Drawing.Point(12, 12);
+            this.pictureBoxQuest.Name = "pictureBoxQuest";
+            this.pictureBoxQuest.Size = new System.Drawing.Size(48, 46);
+            this.pictureBoxQuest.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBoxQuest.TabIndex = 4;
+            this.pictureBoxQuest.TabStop = false;
+            // 
+            // btnOk
+            // 
+            this.btnOk.BackColor = System.Drawing.Color.IndianRed;
+            this.btnOk.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnOk.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnOk.Location = new System.Drawing.Point(28, 76);
+            this.btnOk.Margin = new System.Windows.Forms.Padding(0);
+            this.btnOk.Name = "btnOk";
+            this.btnOk.Size = new System.Drawing.Size(90, 25);
+            this.btnOk.TabIndex = 7;
+            this.btnOk.Text = "ДА";
+            this.btnOk.UseVisualStyleBackColor = false;
+            this.btnOk.Click += new System.EventHandler(this.btnOk_Click);
+            // 
+            // btnNo
+            // 
+            this.btnNo.BackColor = System.Drawing.Color.Transparent;
+            this.btnNo.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnNo.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnNo.Location = new System.Drawing.Point(131, 76);
+            this.btnNo.Margin = new System.Windows.Forms.Padding(0);
+            this.btnNo.Name = "btnNo";
+            this.btnNo.Size = new System.Drawing.Size(90, 25);
+            this.btnNo.TabIndex = 8;
+            this.btnNo.Text = "НЕТ";
+            this.btnNo.UseVisualStyleBackColor = false;
+            this.btnNo.Click += new System.EventHandler(this.btnNo_Click);
+            // 
+            // btnCansel
+            // 
+            this.btnCansel.BackColor = System.Drawing.Color.Transparent;
+            this.btnCansel.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnCansel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnCansel.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnCansel.Location = new System.Drawing.Point(234, 76);
+            this.btnCansel.Margin = new System.Windows.Forms.Padding(0);
+            this.btnCansel.Name = "btnCansel";
+            this.btnCansel.Size = new System.Drawing.Size(90, 25);
+            this.btnCansel.TabIndex = 9;
+            this.btnCansel.Text = "ОТМЕНА";
+            this.btnCansel.UseVisualStyleBackColor = false;
+            this.btnCansel.Click += new System.EventHandler(this.btnCansel_Click);
+            // 
+            // panel1
+            // 
+            this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(40)))));
+            this.panel1.Controls.Add(this.pictureBoxQuest);
+            this.panel1.Controls.Add(this.pictureBoxAllert);
+            this.panel1.Controls.Add(this.colorLabel1);
+            this.panel1.Controls.Add(this.colorLabel2);
+            this.panel1.Controls.Add(this.labelAllert);
+            this.panel1.Controls.Add(this.btnCansel);
+            this.panel1.Controls.Add(this.btnNo);
+            this.panel1.Controls.Add(this.btnOk);
+            this.panel1.Location = new System.Drawing.Point(1, 1);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(358, 108);
+            this.panel1.TabIndex = 10;
+            // 
+            // pictureBoxAllert
+            // 
+            this.pictureBoxAllert.Image = ((System.Drawing.Image)(resources.GetObject("pictureBoxAllert.Image")));
+            this.pictureBoxAllert.Location = new System.Drawing.Point(12, 12);
+            this.pictureBoxAllert.Name = "pictureBoxAllert";
+            this.pictureBoxAllert.Size = new System.Drawing.Size(48, 46);
+            this.pictureBoxAllert.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBoxAllert.TabIndex = 10;
+            this.pictureBoxAllert.TabStop = false;
+            this.pictureBoxAllert.Visible = false;
             // 
             // colorLabel1
             // 
@@ -73,62 +146,17 @@
             this.colorLabel2.TabIndex = 6;
             this.colorLabel2.Text = "Сохранить новые настройки?";
             // 
-            // btnOk
+            // labelAllert
             // 
-            this.btnOk.BackColor = System.Drawing.Color.IndianRed;
-            this.btnOk.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnOk.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btnOk.Location = new System.Drawing.Point(28, 76);
-            this.btnOk.Margin = new System.Windows.Forms.Padding(0);
-            this.btnOk.Name = "btnOk";
-            this.btnOk.Size = new System.Drawing.Size(90, 25);
-            this.btnOk.TabIndex = 7;
-            this.btnOk.Text = "ДА";
-            this.btnOk.UseVisualStyleBackColor = false;
-            this.btnOk.Click += new System.EventHandler(this.btnOk_Click);
-            // 
-            // btnNo
-            // 
-            this.btnNo.BackColor = System.Drawing.Color.Transparent;
-            this.btnNo.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnNo.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btnNo.Location = new System.Drawing.Point(129, 76);
-            this.btnNo.Margin = new System.Windows.Forms.Padding(0);
-            this.btnNo.Name = "btnNo";
-            this.btnNo.Size = new System.Drawing.Size(90, 25);
-            this.btnNo.TabIndex = 8;
-            this.btnNo.Text = "НЕТ";
-            this.btnNo.UseVisualStyleBackColor = false;
-            this.btnNo.Click += new System.EventHandler(this.btnNo_Click);
-            // 
-            // btnCansel
-            // 
-            this.btnCansel.BackColor = System.Drawing.Color.Transparent;
-            this.btnCansel.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnCansel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCansel.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btnCansel.Location = new System.Drawing.Point(229, 76);
-            this.btnCansel.Margin = new System.Windows.Forms.Padding(0);
-            this.btnCansel.Name = "btnCansel";
-            this.btnCansel.Size = new System.Drawing.Size(90, 25);
-            this.btnCansel.TabIndex = 9;
-            this.btnCansel.Text = "ОТМЕНА";
-            this.btnCansel.UseVisualStyleBackColor = false;
-            this.btnCansel.Click += new System.EventHandler(this.btnCansel_Click);
-            // 
-            // panel1
-            // 
-            this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(40)))));
-            this.panel1.Controls.Add(this.pictureBox1);
-            this.panel1.Controls.Add(this.colorLabel1);
-            this.panel1.Controls.Add(this.colorLabel2);
-            this.panel1.Controls.Add(this.btnCansel);
-            this.panel1.Controls.Add(this.btnNo);
-            this.panel1.Controls.Add(this.btnOk);
-            this.panel1.Location = new System.Drawing.Point(1, 1);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(358, 108);
-            this.panel1.TabIndex = 10;
+            this.labelAllert.BackColor = System.Drawing.Color.Transparent;
+            this.labelAllert.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.labelAllert.Location = new System.Drawing.Point(71, 8);
+            this.labelAllert.MaximumSize = new System.Drawing.Size(276, 60);
+            this.labelAllert.Name = "labelAllert";
+            this.labelAllert.Size = new System.Drawing.Size(276, 60);
+            this.labelAllert.TabIndex = 11;
+            this.labelAllert.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.labelAllert.Visible = false;
             // 
             // CustomMsgBox
             // 
@@ -145,20 +173,23 @@
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.Text = "CustomMsgBox";
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxQuest)).EndInit();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxAllert)).EndInit();
             this.ResumeLayout(false);
 
         }
 
         #endregion
-        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.PictureBox pictureBoxQuest;
         private ColorLabel colorLabel1;
         private ColorLabel colorLabel2;
         private System.Windows.Forms.Button btnOk;
         private System.Windows.Forms.Button btnNo;
         private System.Windows.Forms.Button btnCansel;
         private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.PictureBox pictureBoxAllert;
+        private System.Windows.Forms.Label labelAllert;
     }
 }

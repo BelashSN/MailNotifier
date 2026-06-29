@@ -8,14 +8,15 @@ namespace MailNotifier
 {
     // ==============================================================
     #region =========   Кнопка панели меню и main-кнопок   =========
-    // ------------
+    /* ------------ */
     public class ButtonPanel
     {
         // ==============================================================
         #region =============   Глобальные переменные    ================
-        // ------------  
+        /* ------------ */
+        // - панель кнопки
         public TableLayoutPanel BtnPanel { get; }
-        // ------------
+        // - свойства кнопки
         public int Count { get; set; } = 0;
         public string Name { get; } = "DefaultName";
         public bool IsMenu { get; set; } = false;
@@ -25,33 +26,39 @@ namespace MailNotifier
         public string IconName { get; set; } = "Account48.png";
         public Color IconColor { get; set; } = Color.Transparent;
         public ImageList ImgList { get; set; } = FormMain.Form.MainImageList;
+
         // ------------
         #endregion
 
 
         // ==============================================================
         #region ==================  Конструктор   =======================
-        // ------------
+        /* ------------ */
         public ButtonPanel(WorkAccount mAccount, string cName = "")
         {
+            // - инициализация свойств кнопки
             Name = (mAccount != null) ? mAccount.Name : cName;
             Caption = (mAccount != null) ? mAccount.Account.Login : cName;
 
             // ------------ ------------ Основная панель кнопки
-            BtnPanel = new TableLayoutPanel();
-            BtnPanel.Name = Name;
-            BtnPanel.RowCount = 1;
-            BtnPanel.ColumnCount = 4;
-            BtnPanel.Dock = DockStyle.Fill;
-            BtnPanel.BackColor = Color.Transparent;
-            BtnPanel.Padding = new Padding(4, 0, 0, 2);
+            BtnPanel = new TableLayoutPanel
+            {
+                Name = Name,
+                RowCount = 1,
+                ColumnCount = 4,
+                Dock = DockStyle.Fill,
+                BackColor = Color.Transparent,
+                Padding = new Padding(4, 0, 0, 2)
+            };
             BtnPanel.BackColor = ColorTranslator.FromHtml("#00001c");
-            // ------------
+
+            // - добавление стилей колонок
             BtnPanel.ColumnStyles.Add(new ColumnStyle());
             BtnPanel.ColumnStyles.Add(new ColumnStyle());
             BtnPanel.ColumnStyles.Add(new ColumnStyle());
             BtnPanel.ColumnStyles.Add(new ColumnStyle());
-            // ------------
+
+            // - установка стилей колонок
             BtnPanel.ColumnStyles[0].SizeType = SizeType.Absolute;
             BtnPanel.ColumnStyles[0].Width = 18;
             BtnPanel.ColumnStyles[1].SizeType = SizeType.Percent;
@@ -62,57 +69,69 @@ namespace MailNotifier
             BtnPanel.ColumnStyles[3].Width = 30;
 
             // ------------ ------------ Иконка цвета аккаунта
-            PictureBox PanIcon = new PictureBox();
-            PanIcon.Name = "P_Icon";
-            PanIcon.Enabled = false;
-            PanIcon.Anchor = AnchorStyles.None;
-            PanIcon.Margin = new Padding(0, 2, 0, 0);
-            PanIcon.Size = new Size(17, 17);
-            PanIcon.Image = ImgList.Images["MyErr.png"];
-            PanIcon.SizeMode = PictureBoxSizeMode.StretchImage;
-            PanIcon.BackColor = Color.Transparent;
-            // -------
+            PictureBox PanIcon = new PictureBox
+            {
+                Name = "P_Icon",
+                Enabled = false,
+                Anchor = AnchorStyles.None,
+                Margin = new Padding(0, 2, 0, 0),
+                Size = new Size(17, 17),
+                Image = ImgList.Images["MyErr.png"],
+                SizeMode = PictureBoxSizeMode.StretchImage,
+                BackColor = Color.Transparent
+            };
+
+            // - добавление иконки на панель кнопки
             BtnPanel.Controls.Add(PanIcon);
 
             // ------------ ------------ Заголовок - имя аккаунта
-            ColorLabel BtnCaption = new ColorLabel();
-            BtnCaption.Name = "P_Caption";
-            BtnCaption.Enabled = false;
-            BtnCaption.Text = Caption;
-            BtnCaption.Dock = DockStyle.Fill;
-            BtnCaption.ForeColor = Color.Gainsboro;
-            BtnCaption.Padding = new Padding(2, 0, 0, 4);
-            BtnCaption.TextAlign = ContentAlignment.MiddleLeft;
-            BtnCaption.Font = new Font("Microsoft Sans Serif", 9);
-            BtnCaption.BackColor = IconColor;
-            // -------
+            ColorLabel BtnCaption = new ColorLabel
+            {
+                Name = "P_Caption",
+                Enabled = false,
+                Text = Caption,
+                Dock = DockStyle.Fill,
+                ForeColor = Color.Gainsboro,
+                Padding = new Padding(2, 0, 0, 4),
+                TextAlign = ContentAlignment.MiddleLeft,
+                Font = new Font("Microsoft Sans Serif", 9),
+                BackColor = IconColor
+            };
+
+            // - добавление заголовка на панель кнопки
             BtnPanel.Controls.Add(BtnCaption);
 
             // ------------ ------------ Иконка предупреждения об ошибке
-            PictureBox PanAlert = new PictureBox();
-            PanAlert.Name = "P_Alert";
-            PanAlert.Enabled = false;
-            PanAlert.Anchor = AnchorStyles.None;
-            PanAlert.Margin = new Padding(0, 3, 0, 0);
-            PanAlert.Size = new Size(17, 17);
-            PanAlert.Image = ImgList.Images["MyErr.png"];
-            PanAlert.SizeMode = PictureBoxSizeMode.StretchImage;
-            PanAlert.BackColor = Color.Transparent;
-            // -------
+            PictureBox PanAlert = new PictureBox
+            {
+                Name = "P_Alert",
+                Enabled = false,
+                Anchor = AnchorStyles.None,
+                Margin = new Padding(0, 3, 0, 0),
+                Size = new Size(17, 17),
+                Image = ImgList.Images["MyErr.png"],
+                SizeMode = PictureBoxSizeMode.StretchImage,
+                BackColor = Color.Transparent
+            };
+
+            // - добавление иконки предупреждения на панель кнопки
             BtnPanel.Controls.Add(PanAlert);
 
             // ------------ ------------ Указатель количества непрочитанных писем
-            ColorLabel BtnCount = new ColorLabel();
-            BtnCount.Name = "P_Count";
-            BtnCount.Enabled = false;
-            BtnCount.Text = Count.ToString();
-            BtnCount.Dock = DockStyle.Fill;
-            BtnCount.ForeColor = Color.Gainsboro;
-            BtnCount.Margin = new Padding(1, 0, 0, 0);
-            BtnCount.TextAlign = ContentAlignment.MiddleRight;
-            BtnCount.Font = new Font("Microsoft Sans Serif", 9);
-            BtnCount.BackColor = Color.Transparent;
-            // -------
+            ColorLabel BtnCount = new ColorLabel
+            {
+                Name = "P_Count",
+                Enabled = false,
+                Text = Count.ToString(),
+                Dock = DockStyle.Fill,
+                ForeColor = Color.Gainsboro,
+                Margin = new Padding(1, 0, 0, 0),
+                TextAlign = ContentAlignment.MiddleRight,
+                Font = new Font("Microsoft Sans Serif", 9),
+                BackColor = Color.Transparent
+            };
+
+            // - добавление указателя на панель кнопки
             BtnPanel.Controls.Add(BtnCount);
 
             // ------------ ------------ Инициализация событий основной панели
@@ -120,13 +139,14 @@ namespace MailNotifier
             BtnPanel.MouseHover += BtnPanel_MouseHover;
             BtnPanel.MouseLeave += BtnPanel_MouseLeave;
         }
+        
         // ------------
         #endregion
 
 
         // ==============================================================
         #region ======== Реализацияе методов класса ButtonPanel  ========
-        /*---------*/
+        /* --------- */
         // ==================================== Стартовая инициализация 
         public void Iinitialize()
         {
@@ -137,29 +157,35 @@ namespace MailNotifier
             ((PictureBox)BtnPanel.Controls["P_Alert"]).Image = IsAlert ? ImgList.Images["MyErr.png"] : null;
         }
 
-        // ==================================== Собитие при покидании мышью панели кнопки
+        // ==================================== Событие при покидании мышью панели кнопки
         private void BtnPanel_MouseLeave(object sender, EventArgs e)
         {
+            // - установка курсора по умолчанию
             BtnPanel.Cursor = Cursors.Default;
-            // ------------ ------------ Это - боковая кнопка панели
+
+            // - определение, является ли эта кнопка текущей (активной) в данный момент
             bool IsCurrentButton = FormMain.Form.GetCurrentButtonName() == this.Name;
             IsCurrentButton = IsCurrentButton && !this.IsMenu;
-            // ------------
+
+            // - установка цвета панели кнопки в зависимости от активности
             string panColor = (IsCurrentButton) ? "#000038" : "#00001a";
             BtnPanel.BackColor = ColorTranslator.FromHtml(panColor);
         }
 
-        // ==================================== Собитие при наведении мышью на панель кнопки
+        // ==================================== Событие при наведении мышью на панель кнопки
         private void BtnPanel_MouseHover(object sender, EventArgs e)
         {
+            // - установка курсора и цвета панели кнопки при наведении мышью
             BtnPanel.Cursor = Cursors.Hand;
             BtnPanel.BackColor = ColorTranslator.FromHtml("#005");
         }
 
-        // ==================================== Собитие при клике мышью на панель кнопки
+        // ==================================== Событие при клике мышью на панель кнопки
         private void BtnPanelOnClick(object sender, EventArgs e)
         {
-            FormMain.Form.BtnPanelClick(this, e);
+            // - вызов метода обработки клика из главной формы приложения
+            if (((MouseEventArgs)e).Button == MouseButtons.Left)
+                FormMain.Form.BtnPanelClick(this, e);
         }
 
         // ==================================== Установка значения Count - кол-во непрочитанных писем
@@ -175,26 +201,31 @@ namespace MailNotifier
             IsAlert = NewAlert;
             ((PictureBox)BtnPanel.Controls["P_Alert"]).Image = IsAlert ? ImgList.Images["MyErr.png"] : null;
         }
+        
         // ------------
         #endregion
     }
+    
     // ------------
     #endregion
 
     
     // ==============================================================
     #region ========  Панель встраиваемых компонентов меню  =========
-    // ------------
+    /* ------------ */
     public class PanelMenuItem : ToolStripControlHost
     {
         // ==================================== Глобальные переменные
+        // - панель меню, в которую будут добавляться кнопки
         public Panel PanelMenu;
 
         // ==================================== Конструктор
         public PanelMenuItem(ButtonPanel Container, Size cntSize) : base(new Panel())
         {
+            // - инициализация панели меню
             PanelMenu = Control as Panel;
-            // ------------
+
+            // - установка свойств панели меню
             PanelMenu.Size = cntSize;
             PanelMenu.Left = -10;
             PanelMenu.Dock = DockStyle.Fill;
@@ -203,10 +234,12 @@ namespace MailNotifier
             PanelMenu.Margin = new Padding(0, 0, 0, 0);
             PanelMenu.Padding = new Padding(0, 0, 0, 0);
             PanelMenu.BackColor = Color.Transparent;
-            // ------------
+
+            // - добавление панели кнопки в панель меню
             PanelMenu.Controls.Add(Container.BtnPanel);
         }
     }
+    
     // ------------
     #endregion
 }
